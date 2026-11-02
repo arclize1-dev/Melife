@@ -25,6 +25,7 @@
     button { font: inherit; }
 
     .app {
+      position: relative;
       width: min(1120px, calc(100% - 48px));
       margin: 18px auto 48px;
       background: var(--surface);
@@ -39,7 +40,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 20px;
-      padding: 28px 36px;
+      padding: 28px 88px 28px 36px;
       border-bottom: 1px solid var(--line);
     }
 
@@ -58,23 +59,41 @@
     .subtitle { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
     .storage-mode { display: inline-block; margin-left: 6px; padding: 2px 6px; color: #c4baff; background: #302b4c; border-radius: 6px; font-size: 10px; white-space: nowrap; }
     .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      width: fit-content;
-      margin: 24px auto 0;
-      padding: 5px;
-      background: var(--surface);
-      border: 1px solid #303346;
-      border-radius: 14px;
-      box-shadow: 0 10px 32px rgb(0 0 0 / 22%);
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 25;
     }
-    .navbar a {
-      padding: 9px 12px;
+    .navbar-toggle {
+      display: grid;
+      place-content: center;
+      gap: 5px;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      background: var(--surface-raised);
+      border: 1px solid #393c50;
+      border-radius: 11px;
+      cursor: pointer;
+    }
+    .navbar-toggle:hover, .navbar-toggle[aria-expanded="true"] { background: #2b2e42; border-color: #5c548f; }
+    .navbar-toggle:focus-visible { outline: 3px solid #a69aff; outline-offset: 2px; }
+    .navbar-toggle span { display: block; width: 18px; height: 2px; background: #e8e4ff; border-radius: 2px; }
+    .navbar-links {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      display: grid;
+      gap: 4px;
+      width: 220px;
+      padding: 6px;
+      background: var(--surface);
+      border: 1px solid #393c50;
+      border-radius: 12px;
+      box-shadow: 0 12px 32px rgb(0 0 0 / 35%);
+    }
+    .navbar-links a {
+      padding: 11px 12px;
       color: var(--muted);
       border-radius: 9px;
       font-size: 14px;
@@ -82,8 +101,8 @@
       white-space: nowrap;
       transition: color .18s ease, background .18s ease;
     }
-    .navbar a[aria-current="page"] { color: #e8e4ff; background: #2b2e42; }
-    .navbar a:hover, .navbar a:focus-visible { color: #e8e4ff; background: #2b2e42; outline: none; }
+    .navbar-links a[aria-current="page"] { color: #e8e4ff; background: #2b2e42; }
+    .navbar-links a:hover, .navbar-links a:focus-visible { color: #e8e4ff; background: #2b2e42; outline: none; }
     .top-actions { display: flex; align-items: center; gap: 10px; }
     .auth-panel {
       width: min(440px, calc(100% - 32px));
@@ -549,9 +568,9 @@
 
     @media (max-width: 700px) {
       .app { width: calc(100% - 24px); margin: 12px auto; border-radius: 18px; }
-      .navbar { margin-top: 12px; }
+      .navbar { top: 12px; right: 12px; }
       .topbar { padding: 20px; align-items: center; flex-wrap: wrap; }
-      .navbar a { flex: 1; text-align: center; }
+      .topbar { padding-right: 66px; }
       .top-actions .button { width: 40px; padding: 0; font-size: 0; }
       .top-actions .button svg { width: 18px; height: 18px; }
       main { padding: 22px 16px 24px; }
@@ -590,7 +609,7 @@
       .brand-icon { width: 38px; height: 38px; }
       h1 { font-size: 16px; }
       .subtitle { font-size: 11px; }
-      .topbar { padding: 16px 14px; }
+      .topbar { padding: 16px 58px 16px 14px; }
       .month-actions { gap: 5px; }
       .month-actions .button { width: 34px; min-height: 36px; }
       .month-actions .today-button { width: auto; padding: 0 9px; margin-right: 0; font-size: 12px; }
@@ -626,12 +645,17 @@
     </form>
     <p class="auth-status" id="authStatus" role="status" aria-live="polite"></p>
   </section>
-  <nav class="navbar" aria-label="เมนูหลัก" hidden>
-    <a href="#home" aria-current="page">หน้าแรก</a>
-    <a href="#calendar">ปฏิทิน</a>
-    <a href="#expenses">บันทึกรายจ่าย</a>
-  </nav>
   <div class="app" hidden>
+    <nav class="navbar" aria-label="เมนูหลัก">
+      <button class="navbar-toggle" id="navbarToggle" type="button" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="navbarLinks">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="navbar-links" id="navbarLinks" hidden>
+        <a href="#home" aria-current="page">หน้าแรก</a>
+        <a href="#calendar">ปฏิทิน</a>
+        <a href="#expenses">บันทึกรายจ่าย</a>
+      </div>
+    </nav>
     <header class="topbar">
       <div class="brand">
         <div class="brand-icon" aria-hidden="true">
@@ -1801,11 +1825,19 @@
       document.getElementById("calendarPage").hidden = showExpenses || !showCalendar;
       document.getElementById("expensesPage").hidden = !showExpenses;
       document.getElementById("calendarActions").hidden = !showCalendar;
-      document.querySelectorAll(".navbar a").forEach((link) => {
+      document.querySelectorAll(".navbar-links a").forEach((link) => {
         const activeHash = showExpenses ? "#expenses" : showCalendar ? "#calendar" : "#home";
         if (link.hash === activeHash) link.setAttribute("aria-current", "page");
         else link.removeAttribute("aria-current");
       });
+      setNavbarOpen(false);
+    }
+
+    function setNavbarOpen(isOpen) {
+      const toggle = document.getElementById("navbarToggle");
+      toggle.setAttribute("aria-expanded", String(isOpen));
+      toggle.setAttribute("aria-label", isOpen ? "ปิดเมนู" : "เปิดเมนู");
+      document.getElementById("navbarLinks").hidden = !isOpen;
     }
 
     function setDashboardTab(tabId) {
@@ -1840,10 +1872,24 @@
     window.addEventListener("resize", updateExpenseMonthLabels);
     renderExpenses();
     renderDashboard();
-    window.addEventListener("hashchange", setActivePage);
-    document.querySelectorAll(".navbar a").forEach((link) => {
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbar = document.querySelector(".navbar");
+    navbarToggle.addEventListener("click", () => {
+      setNavbarOpen(navbarToggle.getAttribute("aria-expanded") !== "true");
+    });
+    document.querySelectorAll(".navbar-links a").forEach((link) => {
       link.addEventListener("click", () => setActivePage());
     });
+    document.addEventListener("click", (event) => {
+      if (!navbar.contains(event.target)) setNavbarOpen(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && navbarToggle.getAttribute("aria-expanded") === "true") {
+        setNavbarOpen(false);
+        navbarToggle.focus();
+      }
+    });
+    window.addEventListener("hashchange", setActivePage);
     setActivePage();
 
     function onExpenseDateChange() {
