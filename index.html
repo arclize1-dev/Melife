@@ -116,15 +116,17 @@
       position: relative;
       z-index: 19;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
+      gap: 8px;
       width: min(1120px, calc(100% - 48px));
-      margin: 14px auto -12px;
+      margin: 18px auto 24px;
+      padding-top: 16px;
       color: var(--muted);
       font-size: 12px;
+      border-top: 1px solid var(--line);
     }
-    .sync-status { margin-right: auto; }
+    .sync-status { text-align: center; }
     .sync-status.error { color: #ff9aab; }
 
     .button {
@@ -152,9 +154,16 @@
     main { padding: 30px 36px 36px; }
     .home-page { min-height: 500px; }
     .home-heading { margin-bottom: 24px; }
+    .app.home-active .topbar { display: none; }
+    .home-greeting { display: flex; align-items: center; gap: 12px; }
+    .home-greeting-icon { display: grid; flex: 0 0 42px; place-items: center; width: 42px; height: 42px; color: #bcb2ff; background: #35304f; border: 1px solid #514777; border-radius: 12px; }
+    .home-greeting-icon svg { width: 23px; height: 23px; }
+    .home-greeting-copy { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 10px; }
     .home-heading h2 { margin: 0; font-size: 25px; }
-    .home-heading p { margin: 5px 0 0; color: var(--muted); font-size: 14px; }
-    .dashboard-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+    .home-tagline, .home-date { color: var(--muted); font-size: 14px; }
+    .home-tagline { margin: 0; }
+    .home-date { margin: 5px 0 0; }
+    .dashboard-grid { display: block; }
     .dashboard-card {
       min-width: 0;
       padding: 20px;
@@ -162,6 +171,34 @@
       border: 1px solid var(--line);
       border-radius: 16px;
     }
+    .dashboard-tabs {
+      display: flex;
+      gap: 6px;
+      margin: -4px 0 20px;
+      padding: 4px;
+      background: #171923;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .dashboard-tab {
+      flex: 1;
+      min-height: 42px;
+      padding: 8px 12px;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .dashboard-tab[aria-selected="true"] {
+      color: #f0edff;
+      background: #35304f;
+      border-color: #514777;
+    }
+    .dashboard-tab:focus-visible { outline: 3px solid #a69aff; outline-offset: 2px; }
     .dashboard-card h3 { margin: 0; font-size: 18px; }
     .dashboard-card-subtitle { margin: 4px 0 16px; color: var(--muted); font-size: 12px; }
     .upcoming-list { display: grid; gap: 10px; }
@@ -536,8 +573,10 @@
       .expenses-heading h2 { font-size: 21px; }
       .expense-item { align-items: flex-start; gap: 8px; padding: 12px; }
       .expense-item-end { flex-direction: column; align-items: flex-end; gap: 8px; }
-      .dashboard-grid { grid-template-columns: 1fr; gap: 14px; }
       .dashboard-card { padding: 16px; }
+      .dashboard-tabs { margin-top: 0; }
+      .home-greeting { gap: 9px; }
+      .home-greeting-icon { flex-basis: 38px; width: 38px; height: 38px; }
       .home-heading h2 { font-size: 21px; }
       .expenses-list-heading { align-items: flex-start; flex-direction: column; }
       .expense-view-date { width: 100%; gap: 10px; }
@@ -587,12 +626,6 @@
     </form>
     <p class="auth-status" id="authStatus" role="status" aria-live="polite"></p>
   </section>
-  <div class="account-bar" id="accountBar" hidden>
-    <span id="accountEmail"></span>
-    <span class="sync-status" id="syncStatus" role="status" aria-live="polite"></span>
-    <button class="button" id="retrySync" type="button" hidden>ลองซิงก์อีกครั้ง</button>
-    <button class="button" id="signOut" type="button">ออกจากระบบ</button>
-  </div>
   <nav class="navbar" aria-label="เมนูหลัก" hidden>
     <a href="#home" aria-current="page">หน้าแรก</a>
     <a href="#calendar">ปฏิทิน</a>
@@ -629,40 +662,58 @@
 
     <main id="homePage" class="home-page">
       <section class="home-heading">
-        <h2>ว่าไง</h2>
-        <p id="homeDate"></p>
+        <div class="home-greeting">
+          <span class="home-greeting-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3.5" y="5" width="17" height="16" rx="3"></rect>
+              <path d="M7.5 3v4M16.5 3v4M3.5 10h17"></path>
+              <path d="m9 15 2 2 4-4"></path>
+            </svg>
+          </span>
+          <div class="home-greeting-copy">
+            <h2>ว่าไง</h2>
+            <p class="home-tagline">จัดการวันสำคัญของคุณ</p>
+          </div>
+        </div>
+        <p class="home-date" id="homeDate"></p>
       </section>
       <div class="dashboard-grid">
-        <section class="dashboard-card" aria-labelledby="upcomingHeading">
-          <h3 id="upcomingHeading">วันสำคัญที่จะมาถึง</h3>
-          <p class="dashboard-card-subtitle">6 รายการถัดไป</p>
-          <div class="upcoming-list" id="upcomingEvents"></div>
-          <a class="dashboard-action" href="#calendar">ดูปฏิทินทั้งหมด →</a>
-        </section>
-        <section class="dashboard-card" aria-labelledby="monthlyExpensesHeading">
-          <h3 id="monthlyExpensesHeading">สรุปรายจ่าย</h3>
-          <p class="dashboard-card-subtitle" id="dashboardExpenseMonth"></p>
-          <div class="expense-summary">
-            <div class="expense-summary-row total">
-              <span>รายจ่ายทั้งหมด</span>
-              <strong id="dashboardExpenseTotal"></strong>
-            </div>
-            <div class="expense-summary-row paid">
-              <span>จ่ายแล้ว</span>
-              <strong id="dashboardExpensePaid"></strong>
-            </div>
-            <div class="expense-summary-row remaining">
-              <span>คงเหลือที่ต้องจ่าย</span>
-              <strong id="dashboardExpenseRemaining"></strong>
-            </div>
-            <p class="expense-summary-count" id="dashboardExpenseCount"></p>
+        <section class="dashboard-card">
+          <div class="dashboard-tabs" role="tablist" aria-label="เนื้อหาหน้าแรก">
+            <button class="dashboard-tab" id="upcomingTab" type="button" role="tab" aria-selected="true" aria-controls="upcomingPanel">วันสำคัญที่จะมาถึง</button>
+            <button class="dashboard-tab" id="expensesTab" type="button" role="tab" aria-selected="false" aria-controls="expensesPanel" tabindex="-1">สรุปรายจ่าย</button>
           </div>
-          <section class="dashboard-expense-upcoming" aria-labelledby="dashboardUpcomingExpensesHeading">
-            <h4 id="dashboardUpcomingExpensesHeading">รายการที่ต้องจ่ายเร็ว ๆ นี้</h4>
-            <p class="dashboard-card-subtitle">3 รายการถัดไปที่ยังไม่ได้จ่าย</p>
-            <div class="upcoming-list" id="dashboardUpcomingExpenses" aria-live="polite"></div>
+          <section class="dashboard-panel" id="upcomingPanel" role="tabpanel" aria-labelledby="upcomingTab">
+            <h3 id="upcomingHeading">วันสำคัญที่จะมาถึง</h3>
+            <p class="dashboard-card-subtitle">6 รายการถัดไป</p>
+            <div class="upcoming-list" id="upcomingEvents"></div>
+            <a class="dashboard-action" href="#calendar">ดูปฏิทินทั้งหมด →</a>
           </section>
-          <a class="dashboard-action" href="#expenses">ดูรายการรายจ่าย →</a>
+          <section class="dashboard-panel" id="expensesPanel" role="tabpanel" aria-labelledby="expensesTab" hidden>
+            <h3 id="monthlyExpensesHeading">สรุปรายจ่าย</h3>
+            <p class="dashboard-card-subtitle" id="dashboardExpenseMonth"></p>
+            <div class="expense-summary">
+              <div class="expense-summary-row total">
+                <span>รายจ่ายทั้งหมด</span>
+                <strong id="dashboardExpenseTotal"></strong>
+              </div>
+              <div class="expense-summary-row paid">
+                <span>จ่ายแล้ว</span>
+                <strong id="dashboardExpensePaid"></strong>
+              </div>
+              <div class="expense-summary-row remaining">
+                <span>คงเหลือที่ต้องจ่าย</span>
+                <strong id="dashboardExpenseRemaining"></strong>
+              </div>
+              <p class="expense-summary-count" id="dashboardExpenseCount"></p>
+            </div>
+            <section class="dashboard-expense-upcoming" aria-labelledby="dashboardUpcomingExpensesHeading">
+              <h4 id="dashboardUpcomingExpensesHeading">รายการที่ต้องจ่ายเร็ว ๆ นี้</h4>
+              <p class="dashboard-card-subtitle">3 รายการถัดไปที่ยังไม่ได้จ่าย</p>
+              <div class="upcoming-list" id="dashboardUpcomingExpenses" aria-live="polite"></div>
+            </section>
+            <a class="dashboard-action" href="#expenses">ดูรายการรายจ่าย →</a>
+          </section>
         </section>
       </div>
     </main>
@@ -760,6 +811,12 @@
         <div class="expense-items" id="expenseItems"></div>
       </section>
     </main>
+  </div>
+  <div class="account-bar" id="accountBar" hidden>
+    <span id="accountEmail"></span>
+    <span class="sync-status" id="syncStatus" role="status" aria-live="polite"></span>
+    <button class="button" id="retrySync" type="button" hidden>ลองซิงก์อีกครั้ง</button>
+    <button class="button" id="signOut" type="button">ออกจากระบบ</button>
   </div>
 
   <dialog class="event-dialog" id="eventDialog" aria-labelledby="dialogTitle">
@@ -1739,6 +1796,7 @@
     function setActivePage() {
       const showExpenses = window.location.hash === "#expenses";
       const showCalendar = window.location.hash === "#calendar";
+      document.querySelector(".app").classList.toggle("home-active", !showExpenses && !showCalendar);
       document.getElementById("homePage").hidden = showExpenses || showCalendar;
       document.getElementById("calendarPage").hidden = showExpenses || !showCalendar;
       document.getElementById("expensesPage").hidden = !showExpenses;
@@ -1749,6 +1807,32 @@
         else link.removeAttribute("aria-current");
       });
     }
+
+    function setDashboardTab(tabId) {
+      document.querySelectorAll(".dashboard-tab").forEach((tab) => {
+        const selected = tab.id === tabId;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        document.getElementById(tab.getAttribute("aria-controls")).hidden = !selected;
+      });
+    }
+
+    const dashboardTabs = [...document.querySelectorAll(".dashboard-tab")];
+    dashboardTabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => setDashboardTab(tab.id));
+      tab.addEventListener("keydown", (event) => {
+        const direction = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+        const targetIndex = event.key === "Home" ? 0
+          : event.key === "End" ? dashboardTabs.length - 1
+            : direction ? (index + direction + dashboardTabs.length) % dashboardTabs.length
+              : -1;
+        if (targetIndex < 0) return;
+        event.preventDefault();
+        const targetTab = dashboardTabs[targetIndex];
+        setDashboardTab(targetTab.id);
+        targetTab.focus();
+      });
+    });
 
     populateExpenseDate(selectedExpenseDate);
     populateExpenseViewDate();
