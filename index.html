@@ -254,6 +254,11 @@
     .upcoming-details { min-width: 0; }
     .upcoming-title { display: block; overflow: hidden; color: #eff0fa; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
     .upcoming-meta { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    #dashboardUpcomingExpenses .upcoming-item.is-monthly .upcoming-title,
+    #dashboardUpcomingExpenses .upcoming-item.is-monthly .upcoming-meta { color: #f1c27d; }
+    #dashboardUpcomingExpenses .upcoming-item.is-yearly .upcoming-title,
+    #dashboardUpcomingExpenses .upcoming-item.is-yearly .upcoming-meta { color: #9dc9ff; }
+    #dashboardUpcomingExpenses .upcoming-item.is-once .upcoming-title { color: #eff0fa; }
     .dashboard-empty { padding: 20px 12px; color: var(--muted); text-align: center; background: #1b1e2c; border: 1px dashed #3a3d50; border-radius: 11px; }
     .expense-summary { display: grid; gap: 10px; }
     .expense-summary-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; color: #c9cbd9; font-size: 13px; }
@@ -483,6 +488,9 @@
     .expense-item-details { min-width: 0; }
     .expense-item-title { display: block; overflow-wrap: anywhere; color: #eff0fa; font-weight: 600; }
     .expense-item-meta { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .expense-item.is-monthly .expense-item-title, .expense-item.is-monthly .expense-item-meta { color: #f1c27d; }
+    .expense-item.is-yearly .expense-item-title, .expense-item.is-yearly .expense-item-meta { color: #9dc9ff; }
+    .expense-item.is-once .expense-item-title { color: #eff0fa; }
     .expense-item-end { display: flex; flex: 0 0 auto; align-items: center; gap: 12px; }
     .expense-delete-actions { display: flex; flex-wrap: wrap; gap: 8px; }
     .delete-all-button { color: #ffccd4; background: #482833; border-color: #874155; }
@@ -1615,6 +1623,9 @@
       items.forEach((item) => {
         const row = document.createElement("article");
         row.className = "expense-item";
+        row.classList.add(item.recurrence === "monthly"
+          ? "is-monthly"
+          : item.recurrence === "yearly" ? "is-yearly" : "is-once");
         const isPaid = (item.paidDates || []).includes(item.occurrenceDate);
         if (isPaid) row.classList.add("is-paid");
         const details = document.createElement("div");
@@ -1794,6 +1805,9 @@
         upcomingExpenses.forEach((item) => {
           const row = document.createElement("article");
           row.className = "upcoming-item";
+          row.classList.add(item.recurrence === "monthly"
+            ? "is-monthly"
+            : item.recurrence === "yearly" ? "is-yearly" : "is-once");
           const dateBadge = document.createElement("span");
           dateBadge.className = "upcoming-date";
           dateBadge.textContent = new Intl.DateTimeFormat("th-TH", {
