@@ -444,7 +444,8 @@
     .expenses-list-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px; }
     .expenses-list-heading h3 { margin: 0; font-size: 20px; }
     .expenses-list-count { justify-content: flex-end; margin: -7px 0 12px; }
-    .expense-view-date { display: flex; gap: 8px; }
+    .expense-view-date { display: flex; align-items: center; gap: 8px; }
+    .expense-current-month { min-height: 40px; padding: 0 11px; color: #c4baff; white-space: nowrap; }
     .expense-view-date select {
       min-width: 0;
       min-height: 40px;
@@ -608,6 +609,7 @@
       .expenses-list-heading { align-items: flex-start; flex-direction: column; }
       .expense-view-date { width: 100%; gap: 10px; }
       .expense-view-date select { flex: 1; min-height: 48px; padding: 0 14px; font-size: 15px; }
+      .expense-current-month { min-height: 48px; padding: 0 10px; }
       .expense-month-summary { gap: 7px; }
       .expense-month-total { padding: 10px 8px; }
       .expense-month-total strong { font-size: 14px; }
@@ -823,6 +825,7 @@
           <div class="expense-view-date">
             <select id="expenseViewMonth" aria-label="เดือนที่ต้องการดู"></select>
             <select id="expenseViewYear" aria-label="ปีที่ต้องการดู"></select>
+            <button class="button expense-current-month" id="currentExpenseMonth" type="button">เดือนนี้</button>
           </div>
         </div>
         <div class="expense-month-summary" aria-live="polite">
@@ -1923,6 +1926,12 @@
     }
     expenseViewMonth.addEventListener("change", onExpenseViewDateChange);
     expenseViewYear.addEventListener("change", onExpenseViewDateChange);
+    document.getElementById("currentExpenseMonth").addEventListener("click", () => {
+      selectedExpenseViewMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      expenseViewMonth.value = String(selectedExpenseViewMonth.getMonth() + 1);
+      expenseViewYear.value = String(selectedExpenseViewMonth.getFullYear());
+      renderExpenses();
+    });
     expenseMonthly.addEventListener("change", () => {
       if (expenseMonthly.checked) expenseYearly.checked = false;
     });
