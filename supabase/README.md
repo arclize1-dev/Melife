@@ -4,7 +4,7 @@ The app connects directly to the configured Supabase project using its URL and a
 
 ## Database
 
-Run `schema.sql` in the Supabase SQL Editor. It creates `calendar_events` and `expenses`, grants table access to authenticated users, and enables row-level security so each user can only access rows with their own `user_id`. Re-run it after app updates; it includes safe `add column if not exists` migrations such as `expenses.skipped_dates` for deleting one recurring occurrence without deleting the series.
+Run `schema.sql` in the Supabase SQL Editor. It creates `calendar_events`, `expenses`, `daily_spending`, and `monthly_budgets`, grants table access to authenticated users, and enables row-level security so each user can only access rows with their own `user_id`. Daily spending is stored separately from scheduled and recurring expenses. Monthly budgets are saved per month and synced separately. Re-run it after app updates; it includes safe `add column if not exists` migrations such as `expenses.skipped_dates` for deleting one recurring occurrence without deleting the series.
 
 ## Authentication
 
@@ -16,6 +16,7 @@ After signing in:
 
 - Existing browser-local data is imported if the corresponding Supabase table is empty and the local cache is not owned by another signed-in account.
 - If Supabase already contains rows, those rows become the active data and refresh the browser cache.
+- Scheduled expenses and daily spending are saved separately; daily spending totals and per-day entries do not affect scheduled-expense totals.
 - Changes are saved to the local cache and synchronized to Supabase. Sync failures appear in the account bar with a retry button.
 
 The app never needs the secret/service-role key. Keep it server-side only; this standalone frontend uses RLS and the signed-in user's session.

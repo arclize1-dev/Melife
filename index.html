@@ -254,21 +254,29 @@
     .upcoming-details { min-width: 0; }
     .upcoming-title { display: block; overflow: hidden; color: #eff0fa; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
     .upcoming-meta { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
-    #dashboardUpcomingExpenses .upcoming-item.is-monthly .upcoming-title,
-    #dashboardUpcomingExpenses .upcoming-item.is-monthly .upcoming-meta { color: #f1c27d; }
-    #dashboardUpcomingExpenses .upcoming-item.is-yearly .upcoming-title,
-    #dashboardUpcomingExpenses .upcoming-item.is-yearly .upcoming-meta { color: #9dc9ff; }
+    #dashboardUpcomingExpenses .upcoming-item.is-monthly .upcoming-title { color: #77b9ff; }
+    #dashboardUpcomingExpenses .upcoming-item.is-monthly .upcoming-meta { color: #8caecc; }
+    #dashboardUpcomingExpenses .upcoming-item.is-yearly .upcoming-title { color: #9dc9ff; }
+    #dashboardUpcomingExpenses .upcoming-item.is-yearly .upcoming-meta { color: #7993b0; }
     #dashboardUpcomingExpenses .upcoming-item.is-once .upcoming-title { color: #eff0fa; }
     .dashboard-empty { padding: 20px 12px; color: var(--muted); text-align: center; background: #1b1e2c; border: 1px dashed #3a3d50; border-radius: 11px; }
     .expense-summary { display: grid; gap: 10px; }
     .expense-summary-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; color: #c9cbd9; font-size: 13px; }
     .expense-summary-row strong { color: #c4baff; font-size: 16px; white-space: nowrap; }
-    .expense-summary-row.total > span { color: #bcb2ff; }
+    .expense-summary-row.total > span, .expense-summary-row.total strong { color: #ff9aab; }
     .expense-summary-row.paid > span, .expense-summary-row.paid strong { color: #8dd8bd; }
     .expense-summary-row.remaining { margin-top: 4px; padding-top: 13px; border-top: 1px solid var(--line); }
     .expense-summary-row.remaining > span, .expense-summary-row.remaining strong { color: #f1b878; }
-    .expense-summary-row.remaining strong { font-size: 19px; }
+    .expense-summary-row.remaining strong, .expense-summary-row.budget-remaining strong { font-size: 19px; }
     .expense-summary-count { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+    .monthly-budget { display: grid; gap: 8px; padding: 12px; background: #1b1e2c; border: 1px solid #34374a; border-radius: 12px; }
+    .monthly-budget label { color: #d3d5e4; font-size: 13px; font-weight: 600; }
+    .monthly-budget input { width: 100%; min-height: 42px; padding: 0 11px; color: #eff0fa; background: #12141e; border: 1px solid #3a3d50; border-radius: 9px; font: inherit; }
+    .monthly-budget input:focus { border-color: var(--purple); outline: 3px solid #393252; }
+    .monthly-budget-note { margin: 0; color: var(--muted); font-size: 11px; }
+    .expense-summary-row.budget-spent > span, .expense-summary-row.budget-spent strong { color: #ff9aab; }
+    .expense-summary-row.budget-remaining > span, .expense-summary-row.budget-remaining strong { color: #9dc9ff; }
+    .expense-summary-row.budget-remaining.over-budget > span, .expense-summary-row.budget-remaining.over-budget strong { color: #ff9aab; }
     .dashboard-expense-upcoming { margin-top: 18px; }
     .dashboard-expense-upcoming h4 { margin: 0; font-size: 14px; }
     .dashboard-expense-upcoming .dashboard-card-subtitle { margin-bottom: 10px; }
@@ -406,6 +414,47 @@
     .expenses-heading { margin-bottom: 24px; }
     .expenses-heading h2 { margin: 0; font-size: 25px; }
     .expenses-heading p { margin: 5px 0 0; color: var(--muted); font-size: 14px; }
+    .daily-spending { margin-top: 24px; }
+    .daily-spending h3 { margin: 0; font-size: 20px; }
+    .daily-spending-description { margin: 5px 0 14px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .daily-spending-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-top: 18px;
+      padding: 14px 16px;
+      background: #1b1e2c;
+      border: 1px solid #34374a;
+      border-radius: 12px;
+    }
+    .daily-spending-summary span { color: #8dd8bd; font-size: 13px; }
+    .daily-spending-summary strong { color: #8dd8bd; font-size: 19px; }
+    .daily-spending-days { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-top: 10px; }
+    .daily-spending-day {
+      min-width: 0;
+      padding: 13px 15px;
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .daily-spending-day-heading { display: grid; gap: 6px; }
+    .daily-spending-day-heading strong:first-child { color: #eff0fa; }
+    .daily-spending-day-total { color: #8dd8bd; white-space: nowrap; }
+    .daily-spending-entry { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .daily-spending-entry-title { min-width: 0; overflow-wrap: anywhere; }
+    .daily-spending-entry-amount { flex: 0 0 auto; white-space: nowrap; }
+    .daily-spending-delete { flex: 0 0 auto; min-height: 28px; padding: 0 7px; font-size: 11px; }
+    .daily-spending-empty { padding: 16px; color: var(--muted); text-align: center; background: #1b1e2c; border: 1px dashed #3a3d50; border-radius: 12px; }
+    @media (max-width: 1000px) {
+      .daily-spending-days { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 700px) {
+      .daily-spending-days { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 420px) {
+      .daily-spending-days { grid-template-columns: 1fr; }
+    }
     .expense-form {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(180px, .7fr);
@@ -727,6 +776,14 @@
             <h3 id="monthlyExpensesHeading">สรุปรายจ่าย</h3>
             <p class="dashboard-card-subtitle" id="dashboardExpenseMonth"></p>
             <div class="expense-summary">
+              <div class="expense-summary-row budget-spent">
+                <span>ใช้จ่ายรายวันแล้ว</span>
+                <strong id="dashboardDailySpent"></strong>
+              </div>
+              <div class="expense-summary-row budget-paid-expenses">
+                <span>รายจ่ายที่จ่ายแล้ว</span>
+                <strong id="dashboardBudgetPaidExpenses"></strong>
+              </div>
               <div class="expense-summary-row total">
                 <span>รายจ่ายทั้งหมด</span>
                 <strong id="dashboardExpenseTotal"></strong>
@@ -734,6 +791,10 @@
               <div class="expense-summary-row paid">
                 <span>จ่ายแล้ว</span>
                 <strong id="dashboardExpensePaid"></strong>
+              </div>
+              <div class="expense-summary-row budget-remaining" id="dashboardBudgetRemainingRow">
+                <span>คงเหลือจากงบรายเดือน</span>
+                <strong id="dashboardBudgetRemaining"></strong>
               </div>
               <div class="expense-summary-row remaining">
                 <span>คงเหลือที่ต้องจ่าย</span>
@@ -789,6 +850,12 @@
         <p>เลือกวันที่และบันทึกรายจ่ายของคุณ แยกจากปฏิทิน</p>
       </section>
 
+      <div class="monthly-budget">
+        <label for="monthlyBudgetAmount">เงินที่วางแผนจะใช้รายเดือน</label>
+        <input id="monthlyBudgetAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="ใส่งบที่วางแผนไว้">
+        <p class="monthly-budget-note" id="monthlyBudgetStatus" role="status" aria-live="polite">บันทึกอัตโนมัติเมื่อพิมพ์</p>
+      </div>
+
       <form class="expense-form" id="expenseForm">
         <div class="expense-field">
           <label for="expenseTitle">รายการ</label>
@@ -818,6 +885,34 @@
           <button class="button button-primary" type="submit">บันทึกรายจ่าย</button>
         </div>
       </form>
+
+      <section class="daily-spending" aria-labelledby="dailySpendingHeading">
+        <h3 id="dailySpendingHeading">เงินใช้จ่ายรายวัน</h3>
+        <p class="daily-spending-description">บันทึกค่าใช้จ่ายที่เกิดขึ้นจริงพร้อมวันที่และจำนวนเงิน ยอดส่วนนี้แยกจากรายจ่ายประจำเดือนและสรุปยอดใช้จ่ายรายวันของเดือนที่เลือก</p>
+        <form class="expense-form" id="dailySpendingForm">
+          <div class="expense-field">
+            <label for="dailySpendingTitle">รายละเอียดค่าใช้จ่าย</label>
+            <input id="dailySpendingTitle" type="text" maxlength="100" placeholder="เว้นว่างเพื่อใช้ชื่อ วันนี้ใช้ไปแล้ว">
+          </div>
+          <div class="expense-field">
+            <label for="dailySpendingAmount">จำนวนเงิน</label>
+            <input id="dailySpendingAmount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="ระบุจำนวนเงิน" required>
+          </div>
+          <div class="expense-field">
+            <label for="dailySpendingDate">วันที่ใช้จ่าย</label>
+            <input id="dailySpendingDate" type="date" required>
+          </div>
+          <p class="expense-status" id="dailySpendingStatus" aria-live="polite"></p>
+          <div class="expense-submit">
+            <button class="button button-primary" type="submit">บันทึกเงินใช้จ่าย</button>
+          </div>
+        </form>
+        <div class="daily-spending-summary" aria-live="polite">
+          <span>ยอดใช้จ่ายรายวันในเดือนที่เลือก</span>
+          <strong id="dailySpendingMonthTotal"></strong>
+        </div>
+        <div class="daily-spending-days" id="dailySpendingDays" aria-live="polite"></div>
+      </section>
 
       <section class="expenses-list" aria-live="polite" aria-label="รายการรายจ่ายรายเดือน">
         <div class="expenses-list-heading">
@@ -919,6 +1014,9 @@
     let remoteSyncQueue = Promise.resolve();
     let remoteEventsById = new Map();
     let remoteExpensesById = new Map();
+    let remoteDailySpendingById = new Map();
+    let remoteMonthlyBudgetsById = new Map();
+    let remoteSyncTimer = null;
     if (window.supabase?.createClient) {
       supabaseClient = window.supabase.createClient(dataBackendConfig.supabaseUrl, dataBackendConfig.supabaseAnonKey);
     } else {
@@ -982,6 +1080,41 @@
       window.alert("ไม่สามารถโหลดรายจ่ายที่บันทึกไว้ได้");
       expenses = {};
     }
+    const dailySpendingStorageKey = "my-calendar-daily-spending";
+    let dailySpending = [];
+    let hasLocalDailySpending = false;
+    try {
+      const savedDailySpending = mockStorageAdapter.read(dailySpendingStorageKey);
+      hasLocalDailySpending = savedDailySpending !== null;
+      dailySpending = savedDailySpending === null ? [] : JSON.parse(savedDailySpending);
+      if (!Array.isArray(dailySpending) ||
+          dailySpending.some((item) => !item || typeof item.id !== "string" ||
+            typeof item.date !== "string" || !/^\d{4}-\d{1,2}-\d{1,2}$/.test(item.date) ||
+            typeof item.title !== "string" || !Number.isFinite(Number(item.amount)) || Number(item.amount) <= 0)) {
+        throw new Error("ข้อมูลเงินใช้จ่ายรายวันไม่ถูกต้อง");
+      }
+    } catch (error) {
+      console.error("ไม่สามารถโหลดเงินใช้จ่ายรายวันจากเบราว์เซอร์ได้", error);
+      window.alert("ไม่สามารถโหลดเงินใช้จ่ายรายวันที่บันทึกไว้ได้");
+      dailySpending = [];
+    }
+    const monthlyBudgetStorageKey = "my-calendar-monthly-budgets";
+    let monthlyBudgets = {};
+    let hasLocalMonthlyBudgets = false;
+    try {
+      const savedMonthlyBudgets = mockStorageAdapter.read(monthlyBudgetStorageKey);
+      hasLocalMonthlyBudgets = savedMonthlyBudgets !== null;
+      monthlyBudgets = savedMonthlyBudgets === null ? {} : JSON.parse(savedMonthlyBudgets);
+      if (!monthlyBudgets || typeof monthlyBudgets !== "object" || Array.isArray(monthlyBudgets) ||
+          Object.entries(monthlyBudgets).some(([period, amount]) =>
+            !/^\d{4}-\d{2}$/.test(period) || !Number.isFinite(Number(amount)) || Number(amount) < 0)) {
+        throw new Error("ข้อมูลงบรายเดือนไม่ถูกต้อง");
+      }
+    } catch (error) {
+      console.error("ไม่สามารถโหลดข้อมูลงบรายเดือนจากเบราว์เซอร์ได้", error);
+      window.alert("ไม่สามารถโหลดข้อมูลงบรายเดือนที่บันทึกไว้ได้");
+      monthlyBudgets = {};
+    }
 
     let selectedExpenseDate = new Date(today);
     let selectedExpenseViewMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -990,6 +1123,7 @@
     const expenseYear = document.getElementById("expenseYear");
     const expenseViewMonth = document.getElementById("expenseViewMonth");
     const expenseViewYear = document.getElementById("expenseViewYear");
+    const dailySpendingDate = document.getElementById("dailySpendingDate");
     const expenseMonthly = document.getElementById("expenseMonthly");
     const expenseYearly = document.getElementById("expenseYearly");
     const compactMonthNames = window.matchMedia("(max-width: 480px)");
@@ -1118,6 +1252,25 @@
       })));
     }
 
+    function dailySpendingRowsFromState(userId, source = dailySpending) {
+      return source.map((item) => ({
+        id: `${userId}:${item.id}`,
+        user_id: userId,
+        spending_date: toDatabaseDate(item.date),
+        title: item.title,
+        amount: Number(item.amount)
+      }));
+    }
+
+    function monthlyBudgetRowsFromState(userId, source = monthlyBudgets) {
+      return Object.entries(source).map(([period, amount]) => ({
+        id: `${userId}:${period}`,
+        user_id: userId,
+        month_start: `${period}-01`,
+        amount: Number(amount)
+      }));
+    }
+
     function normalizeEventRow(row) {
       return {
         id: row.id,
@@ -1140,6 +1293,25 @@
         recurrence: row.recurrence || "",
         paid_dates: (row.paid_dates || []).slice().sort(),
         skipped_dates: (row.skipped_dates || []).slice().sort()
+      };
+    }
+
+    function normalizeDailySpendingRow(row) {
+      return {
+        id: row.id,
+        user_id: row.user_id,
+        spending_date: row.spending_date,
+        title: row.title,
+        amount: Number(row.amount)
+      };
+    }
+
+    function normalizeMonthlyBudgetRow(row) {
+      return {
+        id: row.id,
+        user_id: row.user_id,
+        month_start: row.month_start,
+        amount: Number(row.amount)
       };
     }
 
@@ -1171,6 +1343,22 @@
         };
         (grouped[expenseDate] ||= []).push(item);
         return grouped;
+      }, {});
+    }
+
+    function dailySpendingFromDatabase(rows) {
+      return rows.map((row) => ({
+        id: row.id.startsWith(`${row.user_id}:`) ? row.id.slice(row.user_id.length + 1) : row.id,
+        date: fromDatabaseDate(row.spending_date),
+        title: row.title,
+        amount: String(row.amount)
+      }));
+    }
+
+    function monthlyBudgetsFromDatabase(rows) {
+      return rows.reduce((budgets, row) => {
+        budgets[row.month_start.slice(0, 7)] = String(row.amount);
+        return budgets;
       }, {});
     }
 
@@ -1213,14 +1401,83 @@
       document.getElementById("retrySync").hidden = !isError;
     }
 
+    function scheduleRemoteSync() {
+      window.clearTimeout(remoteSyncTimer);
+      remoteSyncTimer = window.setTimeout(enqueueRemoteSync, 500);
+    }
+
+    function monthlyBudgetPeriodKey(date) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+    }
+
+    function updateMonthlyBudgetSummary() {
+      const period = monthlyBudgetPeriodKey(today);
+      const input = document.getElementById("monthlyBudgetAmount");
+      if (document.activeElement !== input) input.value = monthlyBudgets[period] ?? "";
+      const spentCents = dailySpending.reduce((total, item) => {
+        return item.date.slice(0, 7) === period
+          ? total + Math.round(Number(item.amount) * 100)
+          : total;
+      }, 0);
+      let paidExpenseCents = 0;
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+      const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+      for (let day = 1; day <= daysInMonth; day += 1) {
+        const date = new Date(monthStart.getFullYear(), monthStart.getMonth(), day);
+        getExpensesForDate(date).forEach((item) => {
+          if (!(item.paidDates || []).includes(item.occurrenceDate)) return;
+          const amount = Number(item.amount);
+          if (Number.isFinite(amount)) paidExpenseCents += Math.round(amount * 100);
+        });
+      }
+      const spent = spentCents / 100;
+      const currencyFormatter = new Intl.NumberFormat("th-TH", {
+        style: "currency", currency: "THB", maximumFractionDigits: 2
+      });
+      document.getElementById("dashboardDailySpent").textContent = currencyFormatter.format(spent);
+      document.getElementById("dashboardBudgetPaidExpenses").textContent =
+        currencyFormatter.format(paidExpenseCents / 100);
+
+      const remainingElement = document.getElementById("dashboardBudgetRemaining");
+      const remainingRow = document.getElementById("dashboardBudgetRemainingRow");
+      const budgetValue = input.value.trim();
+      if (budgetValue === "" || !Number.isFinite(Number(budgetValue)) || Number(budgetValue) < 0) {
+        remainingElement.textContent = "—";
+        remainingRow.classList.remove("over-budget");
+        return;
+      }
+      const remaining = Math.round((Number(budgetValue) * 100) - spentCents - paidExpenseCents) / 100;
+      remainingElement.textContent = currencyFormatter.format(remaining);
+      remainingRow.classList.toggle("over-budget", remaining < 0);
+    }
+
+    function saveMonthlyBudgets() {
+      try {
+        mockStorageAdapter.write(monthlyBudgetStorageKey, JSON.stringify(monthlyBudgets));
+        hasLocalMonthlyBudgets = true;
+        document.getElementById("monthlyBudgetStatus").textContent = "บันทึกแล้ว";
+        scheduleRemoteSync();
+        return true;
+      } catch (error) {
+        console.error("ไม่สามารถบันทึกงบรายเดือนลงในเบราว์เซอร์ได้", error);
+        document.getElementById("monthlyBudgetStatus").textContent =
+          "บันทึกไม่สำเร็จ กรุณาตรวจสอบพื้นที่จัดเก็บของเบราว์เซอร์";
+        return false;
+      }
+    }
+
     function persistRemoteSnapshot() {
       try {
         mockStorageAdapter.write(storageKey, JSON.stringify(events));
         mockStorageAdapter.write(expenseStorageKey, JSON.stringify(expenses));
+        mockStorageAdapter.write(dailySpendingStorageKey, JSON.stringify(dailySpending));
+        mockStorageAdapter.write(monthlyBudgetStorageKey, JSON.stringify(monthlyBudgets));
         hasLocalEvents = true;
         hasLocalExpenses = true;
+        hasLocalDailySpending = true;
+        hasLocalMonthlyBudgets = true;
       } catch (error) {
-        console.error("ไม่สามารถเก็บสำเนา Supabase ไว้ในเบราว์เซอร์ได้", error);
+        console.error("ไม่สามารถเก็บสำเนาข้อมูล Supabase ไว้ในเบราว์เซอร์ได้", error);
         setSyncStatus("ซิงก์ออนไลน์แล้ว แต่บันทึกสำเนาในเครื่องไม่สำเร็จ", true);
       }
     }
@@ -1230,11 +1487,15 @@
       const userId = activeUserId;
       const eventRows = eventRowsFromState(userId);
       const expenseRows = expenseRowsFromState(userId);
+      const dailySpendingRows = dailySpendingRowsFromState(userId);
+      const monthlyBudgetRows = monthlyBudgetRowsFromState(userId);
       setSyncStatus("กำลังซิงก์...");
       remoteSyncQueue = remoteSyncQueue.then(async () => {
         if (!remoteDataReady || activeUserId !== userId) return;
         await syncRows("calendar_events", eventRows, remoteEventsById);
         await syncRows("expenses", expenseRows, remoteExpensesById);
+        await syncRows("daily_spending", dailySpendingRows, remoteDailySpendingById);
+        await syncRows("monthly_budgets", monthlyBudgetRows, remoteMonthlyBudgetsById);
         if (activeUserId === userId) setSyncStatus("ซิงก์แล้ว");
       }).catch((error) => {
         console.error("ซิงก์ข้อมูลกับ Supabase ไม่สำเร็จ", error);
@@ -1255,9 +1516,11 @@
       setSyncStatus("กำลังโหลดข้อมูล...");
 
       try {
-        const [remoteEvents, remoteExpenses] = await Promise.all([
+        const [remoteEvents, remoteExpenses, remoteDailySpending, remoteMonthlyBudgets] = await Promise.all([
           fetchAllRows("calendar_events", "event_date"),
-          fetchAllRows("expenses", "expense_date")
+          fetchAllRows("expenses", "expense_date"),
+          fetchAllRows("daily_spending", "spending_date"),
+          fetchAllRows("monthly_budgets", "month_start")
         ]);
         if (generation !== authGeneration || activeUserId !== user.id) return;
 
@@ -1279,6 +1542,22 @@
         } else {
           expenses = {};
         }
+        if (remoteDailySpending.length > 0) {
+          dailySpending = dailySpendingFromDatabase(remoteDailySpending);
+        } else if (canImportLocalData && hasLocalDailySpending &&
+            dailySpendingRowsFromState(user.id).length > 0) {
+          await syncRows("daily_spending", dailySpendingRowsFromState(user.id), remoteDailySpendingById);
+        } else {
+          dailySpending = [];
+        }
+        if (remoteMonthlyBudgets.length > 0) {
+          monthlyBudgets = monthlyBudgetsFromDatabase(remoteMonthlyBudgets);
+        } else if (canImportLocalData && hasLocalMonthlyBudgets &&
+            monthlyBudgetRowsFromState(user.id).length > 0) {
+          await syncRows("monthly_budgets", monthlyBudgetRowsFromState(user.id), remoteMonthlyBudgetsById);
+        } else {
+          monthlyBudgets = {};
+        }
         if (generation !== authGeneration || activeUserId !== user.id) return;
 
         const eventBaseline = remoteEvents.length > 0
@@ -1287,8 +1566,16 @@
         const expenseBaseline = remoteExpenses.length > 0
           ? remoteExpenses.map(normalizeExpenseRow)
           : expenseRowsFromState(user.id);
+        const dailySpendingBaseline = remoteDailySpending.length > 0
+          ? remoteDailySpending.map(normalizeDailySpendingRow)
+          : dailySpendingRowsFromState(user.id);
+        const monthlyBudgetBaseline = remoteMonthlyBudgets.length > 0
+          ? remoteMonthlyBudgets.map(normalizeMonthlyBudgetRow)
+          : monthlyBudgetRowsFromState(user.id);
         remoteEventsById = new Map(eventBaseline.map((row) => [row.id, row]));
         remoteExpensesById = new Map(expenseBaseline.map((row) => [row.id, row]));
+        remoteDailySpendingById = new Map(dailySpendingBaseline.map((row) => [row.id, row]));
+        remoteMonthlyBudgetsById = new Map(monthlyBudgetBaseline.map((row) => [row.id, row]));
         remoteDataReady = true;
         try {
           mockStorageAdapter.write(supabaseOwnerStorageKey, user.id);
@@ -1298,6 +1585,7 @@
         persistRemoteSnapshot();
         renderCalendar();
         renderExpenses();
+        renderDailySpending();
         renderDashboard();
         setActivePage();
         document.querySelector(".navbar").hidden = false;
@@ -1349,6 +1637,8 @@
         remoteDataReady = false;
         remoteEventsById = new Map();
         remoteExpensesById = new Map();
+        remoteDailySpendingById = new Map();
+        remoteMonthlyBudgetsById = new Map();
         document.getElementById("accountBar").hidden = true;
         document.getElementById("authPanel").hidden = false;
         document.querySelector(".navbar").hidden = true;
@@ -1545,6 +1835,20 @@
       }
     }
 
+    function saveDailySpending() {
+      try {
+        mockStorageAdapter.write(dailySpendingStorageKey, JSON.stringify(dailySpending));
+        hasLocalDailySpending = true;
+        enqueueRemoteSync();
+        return true;
+      } catch (error) {
+        console.error("ไม่สามารถบันทึกเงินใช้จ่ายรายวันลงในเบราว์เซอร์ได้", error);
+        document.getElementById("dailySpendingStatus").textContent =
+          "บันทึกไม่สำเร็จ กรุณาตรวจสอบพื้นที่จัดเก็บของเบราว์เซอร์";
+        return false;
+      }
+    }
+
     function deleteExpenseOccurrence(sourceDate, expenseId, occurrenceDate) {
       const previousExpenses = JSON.stringify(expenses);
       const sourceItems = expenses[sourceDate];
@@ -1579,6 +1883,83 @@
       } else {
         expenses = JSON.parse(previousExpenses);
       }
+    }
+
+    function renderDailySpending() {
+      const month = selectedExpenseViewMonth.getMonth();
+      const year = selectedExpenseViewMonth.getFullYear();
+      const byDate = dailySpending.reduce((grouped, item) => {
+        const date = dateFromKey(item.date);
+        if (date.getFullYear() === year && date.getMonth() === month) {
+          (grouped[item.date] ||= []).push(item);
+        }
+        return grouped;
+      }, {});
+      const days = Object.entries(byDate).sort(([first], [second]) =>
+        dateFromKey(second) - dateFromKey(first));
+      const monthlyTotal = days.reduce((total, [, entries]) =>
+        total + entries.reduce((sum, item) => sum + Math.round(Number(item.amount) * 100), 0), 0) / 100;
+      const currencyFormatter = new Intl.NumberFormat("th-TH", {
+        style: "currency", currency: "THB", maximumFractionDigits: 2
+      });
+      document.getElementById("dailySpendingMonthTotal").textContent = currencyFormatter.format(monthlyTotal);
+
+      const daysContainer = document.getElementById("dailySpendingDays");
+      daysContainer.replaceChildren();
+      if (days.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "daily-spending-empty";
+        empty.textContent = "ยังไม่มีเงินใช้จ่ายรายวันในเดือนที่เลือก";
+        daysContainer.append(empty);
+        return;
+      }
+
+      days.forEach(([dateKeyValue, entries]) => {
+        const day = document.createElement("article");
+        day.className = "daily-spending-day";
+        const dayHeading = document.createElement("div");
+        dayHeading.className = "daily-spending-day-heading";
+        const dayDate = document.createElement("strong");
+        dayDate.textContent = weekdayDateFormatter.format(dateFromKey(dateKeyValue));
+        const dayTotal = document.createElement("strong");
+        dayTotal.className = "daily-spending-day-total";
+        dayTotal.textContent = currencyFormatter.format(
+          entries.reduce((total, item) => total + Math.round(Number(item.amount) * 100), 0) / 100
+        );
+        dayHeading.append(dayDate, dayTotal);
+        day.append(dayHeading);
+
+        entries.forEach((item) => {
+          const entry = document.createElement("div");
+          entry.className = "daily-spending-entry";
+          const title = document.createElement("span");
+          title.className = "daily-spending-entry-title";
+          title.textContent = item.title;
+          const amount = document.createElement("span");
+          amount.className = "daily-spending-entry-amount";
+          amount.textContent = currencyFormatter.format(Number(item.amount));
+          const deleteButton = document.createElement("button");
+          deleteButton.className = "delete-button daily-spending-delete";
+          deleteButton.type = "button";
+          deleteButton.textContent = "ลบ";
+          deleteButton.setAttribute("aria-label", `ลบรายการเงินใช้จ่าย ${item.title} วันที่ ${expenseDateFormatter.format(dateFromKey(item.date))}`);
+          deleteButton.addEventListener("click", () => deleteDailySpending(item.id));
+          entry.append(title, amount, deleteButton);
+          day.append(entry);
+        });
+        daysContainer.append(day);
+      });
+    }
+
+    function deleteDailySpending(spendingId) {
+      const previousDailySpending = JSON.stringify(dailySpending);
+      const remainingRecords = dailySpending.filter((item) => item.id !== spendingId);
+      if (remainingRecords.length === dailySpending.length) return;
+      dailySpending = remainingRecords;
+      if (!saveDailySpending()) {
+        dailySpending = JSON.parse(previousDailySpending);
+      }
+      renderDailySpending();
     }
 
     function renderExpenses() {
@@ -1780,6 +2161,7 @@
       });
       document.getElementById("dashboardExpenseMonth").textContent =
         new Intl.DateTimeFormat("th-TH", { month: "long", year: "numeric" }).format(today);
+      updateMonthlyBudgetSummary();
       document.getElementById("dashboardExpenseTotal").textContent = currencyFormatter.format(totalAmount);
       document.getElementById("dashboardExpensePaid").textContent = currencyFormatter.format(paidAmount);
       document.getElementById("dashboardExpenseRemaining").textContent = currencyFormatter.format(totalAmount - paidAmount);
@@ -1883,11 +2265,34 @@
       });
     });
 
+    document.getElementById("monthlyBudgetAmount").addEventListener("input", (event) => {
+      const input = event.currentTarget;
+      const status = document.getElementById("monthlyBudgetStatus");
+      if (input.validity.badInput || input.validity.rangeUnderflow || input.validity.stepMismatch) {
+        status.textContent = "กรุณาใส่งบเป็นจำนวนเงินที่ไม่ติดลบและมีทศนิยมไม่เกิน 2 ตำแหน่ง";
+        return;
+      }
+
+      const period = monthlyBudgetPeriodKey(today);
+      const previousValue = monthlyBudgets[period];
+      if (input.value === "") delete monthlyBudgets[period];
+      else monthlyBudgets[period] = input.value;
+      updateMonthlyBudgetSummary();
+      if (!saveMonthlyBudgets()) {
+        if (previousValue === undefined) delete monthlyBudgets[period];
+        else monthlyBudgets[period] = previousValue;
+        input.value = previousValue ?? "";
+        updateMonthlyBudgetSummary();
+      }
+    });
+
     populateExpenseDate(selectedExpenseDate);
+    dailySpendingDate.value = toDatabaseDate(dateKey(today));
     populateExpenseViewDate();
     compactMonthNames.addEventListener("change", updateExpenseMonthLabels);
     window.addEventListener("resize", updateExpenseMonthLabels);
     renderExpenses();
+    renderDailySpending();
     renderDashboard();
     const navbarToggle = document.getElementById("navbarToggle");
     const navbar = document.querySelector(".navbar");
@@ -1920,9 +2325,66 @@
     });
     expenseMonth.addEventListener("change", onExpenseDateChange);
     expenseYear.addEventListener("change", onExpenseDateChange);
+    document.getElementById("dailySpendingForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const titleInput = document.getElementById("dailySpendingTitle");
+      const amountInput = document.getElementById("dailySpendingAmount");
+      const status = document.getElementById("dailySpendingStatus");
+      const title = titleInput.value.trim() || "วันนี้ใช้ไปแล้ว";
+      const amount = amountInput.value.trim();
+      status.textContent = "";
+
+      titleInput.setCustomValidity("");
+      const selectedSpendingDate = dailySpendingDate.value;
+      if (!selectedSpendingDate) {
+        dailySpendingDate.setCustomValidity("กรุณาเลือกวันที่ใช้จ่าย");
+        dailySpendingDate.reportValidity();
+        return;
+      }
+      dailySpendingDate.setCustomValidity("");
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(selectedSpendingDate)) {
+        dailySpendingDate.setCustomValidity("กรุณาเลือกวันที่ใช้จ่ายที่ถูกต้อง");
+        dailySpendingDate.reportValidity();
+        return;
+      }
+      if (!Number.isFinite(Number(amount)) || Number(amount) <= 0) {
+        amountInput.setCustomValidity("กรุณาระบุจำนวนเงินที่มากกว่า 0");
+        amountInput.reportValidity();
+        return;
+      }
+      amountInput.setCustomValidity("");
+
+      const spendingDate = fromDatabaseDate(selectedSpendingDate);
+      const previousDailySpending = JSON.stringify(dailySpending);
+      dailySpending = [...dailySpending, {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        date: spendingDate,
+        title,
+        amount
+      }];
+      if (!saveDailySpending()) {
+        dailySpending = JSON.parse(previousDailySpending);
+        status.textContent = "บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง";
+        return;
+      }
+
+      const selectedDate = dateFromKey(spendingDate);
+      selectedExpenseViewMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+      expenseViewMonth.value = String(selectedExpenseViewMonth.getMonth() + 1);
+      expenseViewYear.value = String(selectedExpenseViewMonth.getFullYear());
+      titleInput.value = "";
+      amountInput.value = "";
+      renderExpenses();
+      renderDailySpending();
+      status.textContent = "บันทึกเงินใช้จ่ายแล้ว";
+    });
+    document.getElementById("dailySpendingTitle").addEventListener("input", (event) => event.currentTarget.setCustomValidity(""));
+    document.getElementById("dailySpendingAmount").addEventListener("input", (event) => event.currentTarget.setCustomValidity(""));
+    dailySpendingDate.addEventListener("change", () => dailySpendingDate.setCustomValidity(""));
     function onExpenseViewDateChange() {
       selectedExpenseViewMonth = new Date(Number(expenseViewYear.value), Number(expenseViewMonth.value) - 1, 1);
       renderExpenses();
+      renderDailySpending();
     }
     expenseViewMonth.addEventListener("change", onExpenseViewDateChange);
     expenseViewYear.addEventListener("change", onExpenseViewDateChange);
@@ -1931,6 +2393,7 @@
       expenseViewMonth.value = String(selectedExpenseViewMonth.getMonth() + 1);
       expenseViewYear.value = String(selectedExpenseViewMonth.getFullYear());
       renderExpenses();
+      renderDailySpending();
     });
     expenseMonthly.addEventListener("change", () => {
       if (expenseMonthly.checked) expenseYearly.checked = false;

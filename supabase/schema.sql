@@ -85,3 +85,81 @@ drop policy if exists "Users can delete their own expenses" on public.expenses;
 create policy "Users can delete their own expenses"
   on public.expenses for delete
   using (auth.uid() = user_id);
+
+create table if not exists public.daily_spending (
+  id text primary key,
+  user_id uuid not null references auth.users (id) on delete cascade,
+  spending_date date not null,
+  title text not null,
+  amount numeric(12, 2) not null check (amount > 0),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists daily_spending_user_date_idx
+  on public.daily_spending (user_id, spending_date);
+
+revoke all on public.daily_spending from anon;
+grant select, insert, update, delete on public.daily_spending to authenticated;
+
+alter table public.daily_spending enable row level security;
+
+drop policy if exists "Users can read their own daily spending" on public.daily_spending;
+create policy "Users can read their own daily spending"
+  on public.daily_spending for select
+  using (auth.uid() = user_id);
+
+drop policy if exists "Users can create their own daily spending" on public.daily_spending;
+create policy "Users can create their own daily spending"
+  on public.daily_spending for insert
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users can update their own daily spending" on public.daily_spending;
+create policy "Users can update their own daily spending"
+  on public.daily_spending for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users can delete their own daily spending" on public.daily_spending;
+create policy "Users can delete their own daily spending"
+  on public.daily_spending for delete
+  using (auth.uid() = user_id);
+
+create table if not exists public.monthly_budgets (
+  id text primary key,
+  user_id uuid not null references auth.users (id) on delete cascade,
+  month_start date not null,
+  amount numeric(12, 2) not null check (amount >= 0),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (user_id, month_start)
+);
+
+create index if not exists monthly_budgets_user_month_idx
+  on public.monthly_budgets (user_id, month_start);
+
+revoke all on public.monthly_budgets from anon;
+grant select, insert, update, delete on public.monthly_budgets to authenticated;
+
+alter table public.monthly_budgets enable row level security;
+
+drop policy if exists "Users can read their own monthly budgets" on public.monthly_budgets;
+create policy "Users can read their own monthly budgets"
+  on public.monthly_budgets for select
+  using (auth.uid() = user_id);
+
+drop policy if exists "Users can create their own monthly budgets" on public.monthly_budgets;
+create policy "Users can create their own monthly budgets"
+  on public.monthly_budgets for insert
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users can update their own monthly budgets" on public.monthly_budgets;
+create policy "Users can update their own monthly budgets"
+  on public.monthly_budgets for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users can delete their own monthly budgets" on public.monthly_budgets;
+create policy "Users can delete their own monthly budgets"
+  on public.monthly_budgets for delete
+  using (auth.uid() = user_id);
