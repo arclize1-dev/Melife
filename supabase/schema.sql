@@ -125,6 +125,45 @@ create policy "Users can delete their own daily spending"
   on public.daily_spending for delete
   using (auth.uid() = user_id);
 
+create table if not exists public.income_entries (
+  id text primary key,
+  user_id uuid not null references auth.users (id) on delete cascade,
+  income_date date not null,
+  title text not null,
+  amount numeric(12, 2) not null check (amount > 0),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists income_entries_user_date_idx
+  on public.income_entries (user_id, income_date);
+
+revoke all on public.income_entries from anon;
+grant select, insert, update, delete on public.income_entries to authenticated;
+
+alter table public.income_entries enable row level security;
+
+drop policy if exists "Users can read their own income entries" on public.income_entries;
+create policy "Users can read their own income entries"
+  on public.income_entries for select
+  using (auth.uid() = user_id);
+
+drop policy if exists "Users can create their own income entries" on public.income_entries;
+create policy "Users can create their own income entries"
+  on public.income_entries for insert
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users can update their own income entries" on public.income_entries;
+create policy "Users can update their own income entries"
+  on public.income_entries for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users can delete their own income entries" on public.income_entries;
+create policy "Users can delete their own income entries"
+  on public.income_entries for delete
+  using (auth.uid() = user_id);
+
 create table if not exists public.monthly_budgets (
   id text primary key,
   user_id uuid not null references auth.users (id) on delete cascade,

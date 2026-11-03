@@ -267,16 +267,8 @@
     .expense-summary-row.paid > span, .expense-summary-row.paid strong { color: #8dd8bd; }
     .expense-summary-row.remaining { margin-top: 4px; padding-top: 13px; border-top: 1px solid var(--line); }
     .expense-summary-row.remaining > span, .expense-summary-row.remaining strong { color: #f1b878; }
-    .expense-summary-row.remaining strong, .expense-summary-row.budget-remaining strong { font-size: 19px; }
+    .expense-summary-row.remaining strong { font-size: 19px; }
     .expense-summary-count { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
-    .monthly-budget { display: grid; gap: 8px; padding: 12px; background: #1b1e2c; border: 1px solid #34374a; border-radius: 12px; }
-    .monthly-budget label { color: #d3d5e4; font-size: 13px; font-weight: 600; }
-    .monthly-budget input { width: 100%; min-height: 42px; padding: 0 11px; color: #eff0fa; background: #12141e; border: 1px solid #3a3d50; border-radius: 9px; font: inherit; }
-    .monthly-budget input:focus { border-color: var(--purple); outline: 3px solid #393252; }
-    .monthly-budget-note { margin: 0; color: var(--muted); font-size: 11px; }
-    .expense-summary-row.budget-spent > span, .expense-summary-row.budget-spent strong { color: #ff9aab; }
-    .expense-summary-row.budget-remaining > span, .expense-summary-row.budget-remaining strong { color: #9dc9ff; }
-    .expense-summary-row.budget-remaining.over-budget > span, .expense-summary-row.budget-remaining.over-budget strong { color: #ff9aab; }
     .dashboard-expense-upcoming { margin-top: 18px; }
     .dashboard-expense-upcoming h4 { margin: 0; font-size: 14px; }
     .dashboard-expense-upcoming .dashboard-card-subtitle { margin-bottom: 10px; }
@@ -446,6 +438,13 @@
     .daily-spending-entry-amount { flex: 0 0 auto; white-space: nowrap; }
     .daily-spending-delete { flex: 0 0 auto; min-height: 28px; padding: 0 7px; font-size: 11px; }
     .daily-spending-empty { padding: 16px; color: var(--muted); text-align: center; background: #1b1e2c; border: 1px dashed #3a3d50; border-radius: 12px; }
+    .income-section { margin: 0 0 24px; }
+    .income-section h3 { margin: 0; font-size: 20px; }
+    .income-section .daily-spending-summary { margin-top: 12px; }
+    .income-section .daily-spending-summary span, .income-section .daily-spending-summary strong,
+    .income-entry-amount { color: #8dd8bd; }
+    .income-entry-date { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; }
+    .income-entry-delete { margin-top: 10px; }
     @media (max-width: 1000px) {
       .daily-spending-days { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
@@ -776,14 +775,6 @@
             <h3 id="monthlyExpensesHeading">สรุปรายจ่าย</h3>
             <p class="dashboard-card-subtitle" id="dashboardExpenseMonth"></p>
             <div class="expense-summary">
-              <div class="expense-summary-row budget-spent">
-                <span>ใช้จ่ายรายวันแล้ว</span>
-                <strong id="dashboardDailySpent"></strong>
-              </div>
-              <div class="expense-summary-row budget-paid-expenses">
-                <span>รายจ่ายที่จ่ายแล้ว</span>
-                <strong id="dashboardBudgetPaidExpenses"></strong>
-              </div>
               <div class="expense-summary-row total">
                 <span>รายจ่ายทั้งหมด</span>
                 <strong id="dashboardExpenseTotal"></strong>
@@ -791,10 +782,6 @@
               <div class="expense-summary-row paid">
                 <span>จ่ายแล้ว</span>
                 <strong id="dashboardExpensePaid"></strong>
-              </div>
-              <div class="expense-summary-row budget-remaining" id="dashboardBudgetRemainingRow">
-                <span>คงเหลือจากงบรายเดือน</span>
-                <strong id="dashboardBudgetRemaining"></strong>
               </div>
               <div class="expense-summary-row remaining">
                 <span>คงเหลือที่ต้องจ่าย</span>
@@ -850,11 +837,33 @@
         <p>เลือกวันที่และบันทึกรายจ่ายของคุณ แยกจากปฏิทิน</p>
       </section>
 
-      <div class="monthly-budget">
-        <label for="monthlyBudgetAmount">เงินที่วางแผนจะใช้รายเดือน</label>
-        <input id="monthlyBudgetAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="ใส่งบที่วางแผนไว้">
-        <p class="monthly-budget-note" id="monthlyBudgetStatus" role="status" aria-live="polite">บันทึกอัตโนมัติเมื่อพิมพ์</p>
-      </div>
+      <section class="income-section" aria-labelledby="monthlyIncomeHeading">
+        <h3 id="monthlyIncomeHeading">รายได้เดือนนี้</h3>
+        <p class="daily-spending-description">เพิ่มรายได้แต่ละรายการ ระบบรวมยอดแยกตามเดือนและเก็บประวัติไว้</p>
+        <div class="daily-spending-summary" aria-live="polite">
+          <span>รายได้รวมเดือนนี้</span>
+          <strong id="monthlyIncomeTotal"></strong>
+        </div>
+        <form class="expense-form" id="incomeForm">
+          <div class="expense-field">
+            <label for="incomeTitle">รายละเอียดรายได้</label>
+            <input id="incomeTitle" type="text" maxlength="100" placeholder="เช่น เงินเดือน">
+          </div>
+          <div class="expense-field">
+            <label for="incomeAmount">จำนวนเงิน</label>
+            <input id="incomeAmount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="ระบุจำนวนเงิน" required>
+          </div>
+          <div class="expense-field">
+            <label for="incomeDate">วันที่ได้รับ</label>
+            <input id="incomeDate" type="date" required>
+          </div>
+          <p class="expense-status" id="incomeStatus" aria-live="polite"></p>
+          <div class="expense-submit">
+            <button class="button button-primary" type="submit">เพิ่มรายได้</button>
+          </div>
+        </form>
+        <div class="daily-spending-days" id="monthlyIncomeEntries" aria-live="polite"></div>
+      </section>
 
       <form class="expense-form" id="expenseForm">
         <div class="expense-field">
@@ -1015,7 +1024,7 @@
     let remoteEventsById = new Map();
     let remoteExpensesById = new Map();
     let remoteDailySpendingById = new Map();
-    let remoteMonthlyBudgetsById = new Map();
+    let remoteIncomeById = new Map();
     let remoteSyncTimer = null;
     if (window.supabase?.createClient) {
       supabaseClient = window.supabase.createClient(dataBackendConfig.supabaseUrl, dataBackendConfig.supabaseAnonKey);
@@ -1098,22 +1107,23 @@
       window.alert("ไม่สามารถโหลดเงินใช้จ่ายรายวันที่บันทึกไว้ได้");
       dailySpending = [];
     }
-    const monthlyBudgetStorageKey = "my-calendar-monthly-budgets";
-    let monthlyBudgets = {};
-    let hasLocalMonthlyBudgets = false;
+    const incomeStorageKey = "my-calendar-income";
+    let incomeEntries = [];
+    let hasLocalIncome = false;
     try {
-      const savedMonthlyBudgets = mockStorageAdapter.read(monthlyBudgetStorageKey);
-      hasLocalMonthlyBudgets = savedMonthlyBudgets !== null;
-      monthlyBudgets = savedMonthlyBudgets === null ? {} : JSON.parse(savedMonthlyBudgets);
-      if (!monthlyBudgets || typeof monthlyBudgets !== "object" || Array.isArray(monthlyBudgets) ||
-          Object.entries(monthlyBudgets).some(([period, amount]) =>
-            !/^\d{4}-\d{2}$/.test(period) || !Number.isFinite(Number(amount)) || Number(amount) < 0)) {
-        throw new Error("ข้อมูลงบรายเดือนไม่ถูกต้อง");
+      const savedIncome = mockStorageAdapter.read(incomeStorageKey);
+      hasLocalIncome = savedIncome !== null;
+      incomeEntries = savedIncome === null ? [] : JSON.parse(savedIncome);
+      if (!Array.isArray(incomeEntries) ||
+          incomeEntries.some((item) => !item || typeof item.id !== "string" ||
+            typeof item.date !== "string" || !/^\d{4}-\d{1,2}-\d{1,2}$/.test(item.date) ||
+            typeof item.title !== "string" || !Number.isFinite(Number(item.amount)) || Number(item.amount) <= 0)) {
+        throw new Error("ข้อมูลรายได้ไม่ถูกต้อง");
       }
     } catch (error) {
-      console.error("ไม่สามารถโหลดข้อมูลงบรายเดือนจากเบราว์เซอร์ได้", error);
-      window.alert("ไม่สามารถโหลดข้อมูลงบรายเดือนที่บันทึกไว้ได้");
-      monthlyBudgets = {};
+      console.error("ไม่สามารถโหลดรายได้จากเบราว์เซอร์ได้", error);
+      window.alert("ไม่สามารถโหลดรายได้ที่บันทึกไว้ได้");
+      incomeEntries = [];
     }
 
     let selectedExpenseDate = new Date(today);
@@ -1262,12 +1272,13 @@
       }));
     }
 
-    function monthlyBudgetRowsFromState(userId, source = monthlyBudgets) {
-      return Object.entries(source).map(([period, amount]) => ({
-        id: `${userId}:${period}`,
+    function incomeRowsFromState(userId, source = incomeEntries) {
+      return source.map((item) => ({
+        id: `${userId}:${item.id}`,
         user_id: userId,
-        month_start: `${period}-01`,
-        amount: Number(amount)
+        income_date: toDatabaseDate(item.date),
+        title: item.title,
+        amount: Number(item.amount)
       }));
     }
 
@@ -1306,11 +1317,12 @@
       };
     }
 
-    function normalizeMonthlyBudgetRow(row) {
+    function normalizeIncomeRow(row) {
       return {
         id: row.id,
         user_id: row.user_id,
-        month_start: row.month_start,
+        income_date: row.income_date,
+        title: row.title,
         amount: Number(row.amount)
       };
     }
@@ -1355,11 +1367,13 @@
       }));
     }
 
-    function monthlyBudgetsFromDatabase(rows) {
-      return rows.reduce((budgets, row) => {
-        budgets[row.month_start.slice(0, 7)] = String(row.amount);
-        return budgets;
-      }, {});
+    function incomeFromDatabase(rows) {
+      return rows.map((row) => ({
+        id: row.id.startsWith(`${row.user_id}:`) ? row.id.slice(row.user_id.length + 1) : row.id,
+        date: fromDatabaseDate(row.income_date),
+        title: row.title,
+        amount: String(row.amount)
+      }));
     }
 
     async function fetchAllRows(table, orderColumn) {
@@ -1406,64 +1420,56 @@
       remoteSyncTimer = window.setTimeout(enqueueRemoteSync, 500);
     }
 
-    function monthlyBudgetPeriodKey(date) {
+    function monthPeriodKey(date) {
       return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
     }
 
-    function updateMonthlyBudgetSummary() {
-      const period = monthlyBudgetPeriodKey(today);
-      const input = document.getElementById("monthlyBudgetAmount");
-      if (document.activeElement !== input) input.value = monthlyBudgets[period] ?? "";
-      const spentCents = dailySpending.reduce((total, item) => {
-        return item.date.slice(0, 7) === period
-          ? total + Math.round(Number(item.amount) * 100)
-          : total;
-      }, 0);
-      let paidExpenseCents = 0;
-      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-      const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-      for (let day = 1; day <= daysInMonth; day += 1) {
-        const date = new Date(monthStart.getFullYear(), monthStart.getMonth(), day);
-        getExpensesForDate(date).forEach((item) => {
-          if (!(item.paidDates || []).includes(item.occurrenceDate)) return;
-          const amount = Number(item.amount);
-          if (Number.isFinite(amount)) paidExpenseCents += Math.round(amount * 100);
-        });
-      }
-      const spent = spentCents / 100;
+    function renderMonthlyIncome() {
+      const period = monthPeriodKey(new Date());
+      const entries = incomeEntries
+        .filter((item) => monthPeriodKey(dateFromKey(item.date)) === period)
+        .sort((first, second) =>
+          dateFromKey(second.date) - dateFromKey(first.date) || first.title.localeCompare(second.title, "th"));
+      const totalCents = entries.reduce((sum, item) => sum + Math.round(Number(item.amount) * 100), 0);
       const currencyFormatter = new Intl.NumberFormat("th-TH", {
         style: "currency", currency: "THB", maximumFractionDigits: 2
       });
-      document.getElementById("dashboardDailySpent").textContent = currencyFormatter.format(spent);
-      document.getElementById("dashboardBudgetPaidExpenses").textContent =
-        currencyFormatter.format(paidExpenseCents / 100);
+      document.getElementById("monthlyIncomeTotal").textContent = currencyFormatter.format(totalCents / 100);
 
-      const remainingElement = document.getElementById("dashboardBudgetRemaining");
-      const remainingRow = document.getElementById("dashboardBudgetRemainingRow");
-      const budgetValue = input.value.trim();
-      if (budgetValue === "" || !Number.isFinite(Number(budgetValue)) || Number(budgetValue) < 0) {
-        remainingElement.textContent = "—";
-        remainingRow.classList.remove("over-budget");
+      const entriesContainer = document.getElementById("monthlyIncomeEntries");
+      entriesContainer.replaceChildren();
+      if (entries.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "daily-spending-empty";
+        empty.textContent = "ยังไม่มีรายได้ในเดือนนี้";
+        entriesContainer.append(empty);
         return;
       }
-      const remaining = Math.round((Number(budgetValue) * 100) - spentCents - paidExpenseCents) / 100;
-      remainingElement.textContent = currencyFormatter.format(remaining);
-      remainingRow.classList.toggle("over-budget", remaining < 0);
-    }
 
-    function saveMonthlyBudgets() {
-      try {
-        mockStorageAdapter.write(monthlyBudgetStorageKey, JSON.stringify(monthlyBudgets));
-        hasLocalMonthlyBudgets = true;
-        document.getElementById("monthlyBudgetStatus").textContent = "บันทึกแล้ว";
-        scheduleRemoteSync();
-        return true;
-      } catch (error) {
-        console.error("ไม่สามารถบันทึกงบรายเดือนลงในเบราว์เซอร์ได้", error);
-        document.getElementById("monthlyBudgetStatus").textContent =
-          "บันทึกไม่สำเร็จ กรุณาตรวจสอบพื้นที่จัดเก็บของเบราว์เซอร์";
-        return false;
-      }
+      entries.forEach((item) => {
+        const entry = document.createElement("article");
+        entry.className = "daily-spending-day";
+        const details = document.createElement("div");
+        details.className = "daily-spending-entry";
+        const title = document.createElement("span");
+        title.className = "daily-spending-entry-title";
+        title.textContent = item.title;
+        const amount = document.createElement("strong");
+        amount.className = "income-entry-amount";
+        amount.textContent = currencyFormatter.format(Number(item.amount));
+        details.append(title, amount);
+        const date = document.createElement("span");
+        date.className = "income-entry-date";
+        date.textContent = expenseDateFormatter.format(dateFromKey(item.date));
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-button daily-spending-delete income-entry-delete";
+        deleteButton.type = "button";
+        deleteButton.textContent = "ลบ";
+        deleteButton.setAttribute("aria-label", `ลบรายได้ ${item.title} วันที่ ${expenseDateFormatter.format(dateFromKey(item.date))}`);
+        deleteButton.addEventListener("click", () => deleteIncome(item.id));
+        entry.append(details, date, deleteButton);
+        entriesContainer.append(entry);
+      });
     }
 
     function persistRemoteSnapshot() {
@@ -1471,11 +1477,11 @@
         mockStorageAdapter.write(storageKey, JSON.stringify(events));
         mockStorageAdapter.write(expenseStorageKey, JSON.stringify(expenses));
         mockStorageAdapter.write(dailySpendingStorageKey, JSON.stringify(dailySpending));
-        mockStorageAdapter.write(monthlyBudgetStorageKey, JSON.stringify(monthlyBudgets));
+        mockStorageAdapter.write(incomeStorageKey, JSON.stringify(incomeEntries));
         hasLocalEvents = true;
         hasLocalExpenses = true;
         hasLocalDailySpending = true;
-        hasLocalMonthlyBudgets = true;
+        hasLocalIncome = true;
       } catch (error) {
         console.error("ไม่สามารถเก็บสำเนาข้อมูล Supabase ไว้ในเบราว์เซอร์ได้", error);
         setSyncStatus("ซิงก์ออนไลน์แล้ว แต่บันทึกสำเนาในเครื่องไม่สำเร็จ", true);
@@ -1488,14 +1494,14 @@
       const eventRows = eventRowsFromState(userId);
       const expenseRows = expenseRowsFromState(userId);
       const dailySpendingRows = dailySpendingRowsFromState(userId);
-      const monthlyBudgetRows = monthlyBudgetRowsFromState(userId);
+      const incomeRows = incomeRowsFromState(userId);
       setSyncStatus("กำลังซิงก์...");
       remoteSyncQueue = remoteSyncQueue.then(async () => {
         if (!remoteDataReady || activeUserId !== userId) return;
         await syncRows("calendar_events", eventRows, remoteEventsById);
         await syncRows("expenses", expenseRows, remoteExpensesById);
         await syncRows("daily_spending", dailySpendingRows, remoteDailySpendingById);
-        await syncRows("monthly_budgets", monthlyBudgetRows, remoteMonthlyBudgetsById);
+        await syncRows("income_entries", incomeRows, remoteIncomeById);
         if (activeUserId === userId) setSyncStatus("ซิงก์แล้ว");
       }).catch((error) => {
         console.error("ซิงก์ข้อมูลกับ Supabase ไม่สำเร็จ", error);
@@ -1516,11 +1522,11 @@
       setSyncStatus("กำลังโหลดข้อมูล...");
 
       try {
-        const [remoteEvents, remoteExpenses, remoteDailySpending, remoteMonthlyBudgets] = await Promise.all([
+        const [remoteEvents, remoteExpenses, remoteDailySpending, remoteIncome] = await Promise.all([
           fetchAllRows("calendar_events", "event_date"),
           fetchAllRows("expenses", "expense_date"),
           fetchAllRows("daily_spending", "spending_date"),
-          fetchAllRows("monthly_budgets", "month_start")
+          fetchAllRows("income_entries", "income_date")
         ]);
         if (generation !== authGeneration || activeUserId !== user.id) return;
 
@@ -1550,13 +1556,13 @@
         } else {
           dailySpending = [];
         }
-        if (remoteMonthlyBudgets.length > 0) {
-          monthlyBudgets = monthlyBudgetsFromDatabase(remoteMonthlyBudgets);
-        } else if (canImportLocalData && hasLocalMonthlyBudgets &&
-            monthlyBudgetRowsFromState(user.id).length > 0) {
-          await syncRows("monthly_budgets", monthlyBudgetRowsFromState(user.id), remoteMonthlyBudgetsById);
+        if (remoteIncome.length > 0) {
+          incomeEntries = incomeFromDatabase(remoteIncome);
+        } else if (canImportLocalData && hasLocalIncome &&
+            incomeRowsFromState(user.id).length > 0) {
+          await syncRows("income_entries", incomeRowsFromState(user.id), remoteIncomeById);
         } else {
-          monthlyBudgets = {};
+          incomeEntries = [];
         }
         if (generation !== authGeneration || activeUserId !== user.id) return;
 
@@ -1569,13 +1575,13 @@
         const dailySpendingBaseline = remoteDailySpending.length > 0
           ? remoteDailySpending.map(normalizeDailySpendingRow)
           : dailySpendingRowsFromState(user.id);
-        const monthlyBudgetBaseline = remoteMonthlyBudgets.length > 0
-          ? remoteMonthlyBudgets.map(normalizeMonthlyBudgetRow)
-          : monthlyBudgetRowsFromState(user.id);
+        const incomeBaseline = remoteIncome.length > 0
+          ? remoteIncome.map(normalizeIncomeRow)
+          : incomeRowsFromState(user.id);
         remoteEventsById = new Map(eventBaseline.map((row) => [row.id, row]));
         remoteExpensesById = new Map(expenseBaseline.map((row) => [row.id, row]));
         remoteDailySpendingById = new Map(dailySpendingBaseline.map((row) => [row.id, row]));
-        remoteMonthlyBudgetsById = new Map(monthlyBudgetBaseline.map((row) => [row.id, row]));
+        remoteIncomeById = new Map(incomeBaseline.map((row) => [row.id, row]));
         remoteDataReady = true;
         try {
           mockStorageAdapter.write(supabaseOwnerStorageKey, user.id);
@@ -1586,6 +1592,7 @@
         renderCalendar();
         renderExpenses();
         renderDailySpending();
+        renderMonthlyIncome();
         renderDashboard();
         setActivePage();
         document.querySelector(".navbar").hidden = false;
@@ -1638,7 +1645,7 @@
         remoteEventsById = new Map();
         remoteExpensesById = new Map();
         remoteDailySpendingById = new Map();
-        remoteMonthlyBudgetsById = new Map();
+        remoteIncomeById = new Map();
         document.getElementById("accountBar").hidden = true;
         document.getElementById("authPanel").hidden = false;
         document.querySelector(".navbar").hidden = true;
@@ -1847,6 +1854,30 @@
           "บันทึกไม่สำเร็จ กรุณาตรวจสอบพื้นที่จัดเก็บของเบราว์เซอร์";
         return false;
       }
+    }
+
+    function saveIncomeEntries() {
+      try {
+        mockStorageAdapter.write(incomeStorageKey, JSON.stringify(incomeEntries));
+        hasLocalIncome = true;
+        enqueueRemoteSync();
+        return true;
+      } catch (error) {
+        console.error("ไม่สามารถบันทึกรายได้ลงในเบราว์เซอร์ได้", error);
+        document.getElementById("incomeStatus").textContent =
+          "บันทึกไม่สำเร็จ กรุณาตรวจสอบพื้นที่จัดเก็บของเบราว์เซอร์";
+        return false;
+      }
+    }
+
+    function deleteIncome(incomeId) {
+      const previousIncome = JSON.stringify(incomeEntries);
+      incomeEntries = incomeEntries.filter((item) => item.id !== incomeId);
+      if (!saveIncomeEntries()) {
+        incomeEntries = JSON.parse(previousIncome);
+        return;
+      }
+      renderMonthlyIncome();
     }
 
     function deleteExpenseOccurrence(sourceDate, expenseId, occurrenceDate) {
@@ -2161,7 +2192,6 @@
       });
       document.getElementById("dashboardExpenseMonth").textContent =
         new Intl.DateTimeFormat("th-TH", { month: "long", year: "numeric" }).format(today);
-      updateMonthlyBudgetSummary();
       document.getElementById("dashboardExpenseTotal").textContent = currencyFormatter.format(totalAmount);
       document.getElementById("dashboardExpensePaid").textContent = currencyFormatter.format(paidAmount);
       document.getElementById("dashboardExpenseRemaining").textContent = currencyFormatter.format(totalAmount - paidAmount);
@@ -2265,34 +2295,15 @@
       });
     });
 
-    document.getElementById("monthlyBudgetAmount").addEventListener("input", (event) => {
-      const input = event.currentTarget;
-      const status = document.getElementById("monthlyBudgetStatus");
-      if (input.validity.badInput || input.validity.rangeUnderflow || input.validity.stepMismatch) {
-        status.textContent = "กรุณาใส่งบเป็นจำนวนเงินที่ไม่ติดลบและมีทศนิยมไม่เกิน 2 ตำแหน่ง";
-        return;
-      }
-
-      const period = monthlyBudgetPeriodKey(today);
-      const previousValue = monthlyBudgets[period];
-      if (input.value === "") delete monthlyBudgets[period];
-      else monthlyBudgets[period] = input.value;
-      updateMonthlyBudgetSummary();
-      if (!saveMonthlyBudgets()) {
-        if (previousValue === undefined) delete monthlyBudgets[period];
-        else monthlyBudgets[period] = previousValue;
-        input.value = previousValue ?? "";
-        updateMonthlyBudgetSummary();
-      }
-    });
-
     populateExpenseDate(selectedExpenseDate);
     dailySpendingDate.value = toDatabaseDate(dateKey(today));
+    document.getElementById("incomeDate").value = toDatabaseDate(dateKey(new Date()));
     populateExpenseViewDate();
     compactMonthNames.addEventListener("change", updateExpenseMonthLabels);
     window.addEventListener("resize", updateExpenseMonthLabels);
     renderExpenses();
     renderDailySpending();
+    renderMonthlyIncome();
     renderDashboard();
     const navbarToggle = document.getElementById("navbarToggle");
     const navbar = document.querySelector(".navbar");
@@ -2313,6 +2324,49 @@
     });
     window.addEventListener("hashchange", setActivePage);
     setActivePage();
+
+    document.getElementById("incomeForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const titleInput = document.getElementById("incomeTitle");
+      const amountInput = document.getElementById("incomeAmount");
+      const dateInput = document.getElementById("incomeDate");
+      const status = document.getElementById("incomeStatus");
+      status.textContent = "";
+      const dateValue = dateInput.value;
+      const amount = amountInput.value.trim();
+
+      if (!dateValue || !/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        dateInput.setCustomValidity("กรุณาเลือกวันที่ได้รับรายได้");
+        dateInput.reportValidity();
+        return;
+      }
+      dateInput.setCustomValidity("");
+      if (!Number.isFinite(Number(amount)) || Number(amount) <= 0) {
+        amountInput.setCustomValidity("กรุณาระบุจำนวนเงินที่มากกว่า 0");
+        amountInput.reportValidity();
+        return;
+      }
+      amountInput.setCustomValidity("");
+
+      const previousIncome = JSON.stringify(incomeEntries);
+      incomeEntries = [...incomeEntries, {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        date: fromDatabaseDate(dateValue),
+        title: titleInput.value.trim() || "รายได้",
+        amount
+      }];
+      if (!saveIncomeEntries()) {
+        incomeEntries = JSON.parse(previousIncome);
+        status.textContent = "บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง";
+        return;
+      }
+      titleInput.value = "";
+      amountInput.value = "";
+      renderMonthlyIncome();
+      status.textContent = "เพิ่มรายได้แล้ว";
+    });
+    document.getElementById("incomeAmount").addEventListener("input", (event) => event.currentTarget.setCustomValidity(""));
+    document.getElementById("incomeDate").addEventListener("change", (event) => event.currentTarget.setCustomValidity(""));
 
     function onExpenseDateChange() {
       populateExpenseDays(Number(expenseDay.value));

@@ -4,7 +4,7 @@ The app connects directly to the configured Supabase project using its URL and a
 
 ## Database
 
-Run `schema.sql` in the Supabase SQL Editor. It creates `calendar_events`, `expenses`, `daily_spending`, and `monthly_budgets`, grants table access to authenticated users, and enables row-level security so each user can only access rows with their own `user_id`. Daily spending is stored separately from scheduled and recurring expenses. Monthly budgets are saved per month and synced separately. Re-run it after app updates; it includes safe `add column if not exists` migrations such as `expenses.skipped_dates` for deleting one recurring occurrence without deleting the series.
+Run `schema.sql` in the Supabase SQL Editor. It creates `calendar_events`, `expenses`, `daily_spending`, and `income_entries`, grants table access to authenticated users, and enables row-level security so each user can only access rows with their own `user_id`. Daily spending, income, and scheduled expenses are stored separately. Income records are dated and retained across months, while the app totals and displays the current month's entries; a new month starts at zero until new income is recorded. The `monthly_budgets` table is retained for compatibility with existing projects but is no longer used by the app. Re-run the schema after app updates; it includes safe `add column if not exists` migrations such as `expenses.skipped_dates` for deleting one recurring occurrence without deleting the series.
 
 ## Authentication
 
@@ -17,6 +17,7 @@ After signing in:
 - Existing browser-local data is imported if the corresponding Supabase table is empty and the local cache is not owned by another signed-in account.
 - If Supabase already contains rows, those rows become the active data and refresh the browser cache.
 - Scheduled expenses and daily spending are saved separately; daily spending totals and per-day entries do not affect scheduled-expense totals.
+- Income entries are saved separately in `income_entries`; each user's records are private under RLS and remain available across months.
 - Changes are saved to the local cache and synchronized to Supabase. Sync failures appear in the account bar with a retry button.
 
 The app never needs the secret/service-role key. Keep it server-side only; this standalone frontend uses RLS and the signed-in user's session.
