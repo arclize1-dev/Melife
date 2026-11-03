@@ -714,16 +714,16 @@
       <div class="dashboard-grid">
         <section class="dashboard-card">
           <div class="dashboard-tabs" role="tablist" aria-label="เนื้อหาหน้าแรก">
-            <button class="dashboard-tab" id="upcomingTab" type="button" role="tab" aria-selected="true" aria-controls="upcomingPanel">วันสำคัญที่จะมาถึง</button>
-            <button class="dashboard-tab" id="expensesTab" type="button" role="tab" aria-selected="false" aria-controls="expensesPanel" tabindex="-1">สรุปรายจ่าย</button>
+            <button class="dashboard-tab" id="upcomingTab" type="button" role="tab" aria-selected="false" aria-controls="upcomingPanel" tabindex="-1">วันสำคัญที่จะมาถึง</button>
+            <button class="dashboard-tab" id="expensesTab" type="button" role="tab" aria-selected="true" aria-controls="expensesPanel">สรุปรายจ่าย</button>
           </div>
-          <section class="dashboard-panel" id="upcomingPanel" role="tabpanel" aria-labelledby="upcomingTab">
+          <section class="dashboard-panel" id="upcomingPanel" role="tabpanel" aria-labelledby="upcomingTab" hidden>
             <h3 id="upcomingHeading">วันสำคัญที่จะมาถึง</h3>
             <p class="dashboard-card-subtitle">6 รายการถัดไป</p>
             <div class="upcoming-list" id="upcomingEvents"></div>
             <a class="dashboard-action" href="#calendar">ดูปฏิทินทั้งหมด →</a>
           </section>
-          <section class="dashboard-panel" id="expensesPanel" role="tabpanel" aria-labelledby="expensesTab" hidden>
+          <section class="dashboard-panel" id="expensesPanel" role="tabpanel" aria-labelledby="expensesTab">
             <h3 id="monthlyExpensesHeading">สรุปรายจ่าย</h3>
             <p class="dashboard-card-subtitle" id="dashboardExpenseMonth"></p>
             <div class="expense-summary">
