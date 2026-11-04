@@ -298,6 +298,8 @@
     }
     .expense-summary-row.month-income-remaining > span, .expense-summary-row.month-income-remaining strong { color: #c4baff; }
     .expense-summary-row.month-income-remaining strong { font-size: 20px; }
+    .expense-summary-row.month-income-total > span, .expense-summary-row.month-income-total strong { color: #8dd8bd; }
+    .expense-summary-row.daily-average > span, .expense-summary-row.daily-average strong { color: #f1c27d; }
     .expense-summary-count { grid-column: 1 / -1; margin: 2px 0 0; color: var(--muted); font-size: 12px; }
     @media (max-width: 480px) {
       .expense-summary { gap: 8px; }
@@ -819,6 +821,14 @@
               <div class="expense-summary-row month-income-remaining">
                 <span>เงินคงเหลือเดือนนี้</span>
                 <strong id="dashboardMonthIncomeRemaining"></strong>
+              </div>
+              <div class="expense-summary-row month-income-total">
+                <span>รายได้เดือนนี้</span>
+                <strong id="dashboardMonthIncomeTotal"></strong>
+              </div>
+              <div class="expense-summary-row daily-average">
+                <span>คงเหลือเฉลี่ยรายวัน</span>
+                <strong id="dashboardDailyAverageRemaining"></strong>
               </div>
               <div class="expense-summary-row total">
                 <span>รายจ่ายทั้งหมด</span>
@@ -2263,6 +2273,8 @@
           ? total + Math.round(Number(item.amount) * 100)
           : total, 0);
       const monthSpentCents = dailySpentMonthCents + paidCents;
+      const monthRemainingCents = incomeMonthCents - monthSpentCents;
+      const daysRemaining = daysInMonth - today.getDate() + 1;
       const currencyFormatter = new Intl.NumberFormat("th-TH", {
         style: "currency", currency: "THB", maximumFractionDigits: 2
       });
@@ -2275,7 +2287,11 @@
       document.getElementById("dashboardExpenseRemaining").textContent =
         currencyFormatter.format((totalCents - paidCents) / 100);
       document.getElementById("dashboardMonthIncomeRemaining").textContent =
-        currencyFormatter.format((incomeMonthCents - monthSpentCents) / 100);
+        currencyFormatter.format(monthRemainingCents / 100);
+      document.getElementById("dashboardMonthIncomeTotal").textContent =
+        currencyFormatter.format(incomeMonthCents / 100);
+      document.getElementById("dashboardDailyAverageRemaining").textContent =
+        currencyFormatter.format(Math.round(monthRemainingCents / daysRemaining) / 100);
       document.getElementById("dashboardExpenseCount").textContent =
         `${new Intl.NumberFormat("th-TH").format(itemCount)} รายการ · จ่ายแล้ว ${new Intl.NumberFormat("th-TH").format(paidCount)} รายการ`;
 
