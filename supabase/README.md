@@ -4,7 +4,9 @@ The app connects directly to the configured Supabase project using its URL and a
 
 ## Database
 
-Run `schema.sql` in the Supabase SQL Editor. It creates `calendar_events`, `expenses`, `daily_spending`, and `income_entries`, grants table access to authenticated users, and enables row-level security so each user can only access rows with their own `user_id`. Daily spending, income, and scheduled expenses are stored separately. Income records are dated and retained across months, while the app totals and displays the current month's entries; a new month starts at zero until new income is recorded. The `monthly_budgets` table is retained for compatibility with existing projects but is no longer used by the app. Re-run the schema after app updates; it includes safe `add column if not exists` migrations such as `expenses.skipped_dates` for deleting one recurring occurrence without deleting the series.
+Run `schema.sql` in the Supabase SQL Editor. It creates `expenses`, `daily_spending`, and `income_entries`, grants table access to authenticated users, and enables row-level security so each user can only access rows with their own `user_id`. Daily spending, income, and scheduled expenses are stored separately. Income records are dated and retained across months, while the app totals and displays the current month's entries; a new month starts at zero until new income is recorded. The `monthly_budgets` table is retained for compatibility with existing projects but is no longer used by the app. Re-run the schema after app updates; it includes safe `add column if not exists` migrations such as `expenses.skipped_dates` for deleting one recurring occurrence without deleting the series.
+
+The app no longer uses calendar events. If an earlier version created a `calendar_events` table, this schema leaves that table and its data untouched; remove it manually only if you explicitly want to delete that data.
 
 ## Authentication
 

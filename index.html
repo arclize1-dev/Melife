@@ -103,7 +103,6 @@
     }
     .navbar-links a[aria-current="page"] { color: #e8e4ff; background: #2b2e42; }
     .navbar-links a:hover, .navbar-links a:focus-visible { color: #e8e4ff; background: #2b2e42; outline: none; }
-    .top-actions { display: flex; align-items: center; gap: 10px; }
     .auth-panel {
       width: min(440px, calc(100% - 32px));
       margin: 10vh auto 24px;
@@ -190,34 +189,6 @@
       border: 1px solid var(--line);
       border-radius: 16px;
     }
-    .dashboard-tabs {
-      display: flex;
-      gap: 6px;
-      margin: -4px 0 20px;
-      padding: 4px;
-      background: #171923;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-    }
-    .dashboard-tab {
-      flex: 1;
-      min-height: 42px;
-      padding: 8px 12px;
-      color: var(--muted);
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 9px;
-      font: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .dashboard-tab[aria-selected="true"] {
-      color: #f0edff;
-      background: #35304f;
-      border-color: #514777;
-    }
-    .dashboard-tab:focus-visible { outline: 3px solid #a69aff; outline-offset: 2px; }
     .dashboard-card h3 { margin: 0; font-size: 18px; }
     .dashboard-card-subtitle { margin: 4px 0 16px; color: var(--muted); font-size: 12px; }
     .upcoming-list { display: grid; gap: 10px; }
@@ -313,122 +284,6 @@
     .dashboard-expense-upcoming .dashboard-card-subtitle { margin-bottom: 10px; }
     .dashboard-action { display: inline-flex; margin-top: 16px; color: #bcb2ff; font-size: 13px; text-decoration: none; }
     .dashboard-action:hover { color: #e8e4ff; text-decoration: underline; }
-    .calendar-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 22px;
-    }
-    .month-title { margin: 0; font-size: 25px; font-weight: 700; letter-spacing: -.6px; }
-    .month-title span { margin-left: 7px; color: var(--muted); font-size: 17px; font-weight: 500; }
-    .month-actions { display: flex; align-items: center; gap: 8px; }
-    .month-actions .button { width: 40px; min-height: 40px; padding: 0; }
-    .month-actions .today-button { width: auto; padding: 0 14px; margin-right: 5px; }
-
-    .calendar {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      border-top: 1px solid var(--line);
-      border-left: 1px solid var(--line);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .weekday {
-      display: grid;
-      place-items: center;
-      min-height: 47px;
-      color: var(--muted);
-      background: #202232;
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .day {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      min-width: 0;
-      min-height: 105px;
-      padding: 10px;
-      color: #e4e6f2;
-      text-align: left;
-      background: var(--surface);
-      border: 0;
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      cursor: pointer;
-      transition: background .15s ease;
-    }
-    .day:hover { background: #242638; }
-    .day.outside-month { color: #666b80; background: #171923; }
-    .day.selected { background: #28253d; box-shadow: inset 0 0 0 2px #8b7df0; }
-    .day-number { display: grid; place-items: center; width: 28px; height: 28px; font-size: 13px; }
-    .day.today .day-number { color: white; background: var(--purple); border-radius: 50%; font-weight: 700; }
-    .event {
-      width: 100%;
-      margin-top: 5px;
-      padding: 4px 6px;
-      overflow: hidden;
-      color: #c4baff;
-      background: #35304f;
-      border-radius: 5px;
-      font-size: 11px;
-      line-height: 1.4;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .event.green { color: #8dd8bd; background: #233d39; }
-    .event.orange { color: #f1c27d; background: #443729; }
-    .event.pink { color: #f0a2be; background: #452c3b; }
-    .event.blue { color: #9dc9ff; background: #26394d; }
-    .event.red { color: #ff9aab; background: #482833; }
-    .event.white { color: #f0f1f5; background: #414452; }
-
-    .selection { min-height: 68px; padding: 18px 0 0; color: var(--muted); font-size: 13px; }
-    .selection-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-    .selection-heading > div { min-width: 0; }
-    .selection strong { color: #dfe1ee; font-weight: 600; }
-    .selection .hint { font-size: 12px; }
-    #calendar, #selectedEvents { scroll-margin-top: 20px; }
-    .future-events { margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--line); }
-    .future-events-heading { margin-bottom: 16px; }
-    .future-events-heading h3 { margin: 0; font-size: 20px; }
-    .future-events-heading p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
-    .future-events-list, .selected-events { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-    .selected-events { width: 100%; margin-top: 14px; }
-    .selected-event, .future-event-card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-      padding: 14px;
-      background: var(--surface-raised);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      box-shadow: 0 5px 16px rgb(0 0 0 / 12%);
-    }
-    .future-event-card, .selected-event { justify-content: flex-start; }
-    .future-event-card .upcoming-details, .selected-event .upcoming-details { flex: 1; }
-    .future-event-card .delete-button, .selected-event .delete-button { margin-left: auto; }
-    .event-details { min-width: 0; }
-    .event-name { display: block; overflow-wrap: anywhere; color: #eff0fa; font-weight: 600; }
-    .event-name.purple { color: #c4baff; }
-    .event-name.green { color: #8dd8bd; }
-    .event-name.orange { color: #f1c27d; }
-    .event-name.pink { color: #f0a2be; }
-    .event-name.blue { color: #9dc9ff; }
-    .event-name.red { color: #ff9aab; }
-    .event-name.white { color: #f0f1f5; }
-    .event-meta { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
     .delete-button {
       flex: 0 0 auto;
       min-height: 34px;
@@ -593,93 +448,13 @@
     .empty-expenses { padding: 26px 16px; color: var(--muted); text-align: center; background: var(--surface-raised); border: 1px dashed #3a3d50; border-radius: 12px; }
     .expense-status { grid-column: 1 / -1; min-height: 18px; margin: -8px 0 0; color: #ff9aab; font-size: 12px; }
 
-    .event-dialog {
-      width: min(420px, calc(100% - 32px));
-      padding: 26px;
-      color: #eff0fa;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      box-shadow: 0 24px 80px rgb(0 0 0 / 45%);
-    }
-    .event-dialog::backdrop { background: rgb(4 5 10 / 72%); }
-    .event-dialog h2 { margin: 0; font-size: 20px; }
-    .dialog-date { margin: 5px 0 20px; color: var(--muted); font-size: 13px; }
-    .event-dialog label { display: block; margin: 14px 0 7px; color: #d3d5e4; font-size: 13px; font-weight: 600; }
-    .event-dialog input {
-      width: 100%;
-      min-height: 44px;
-      padding: 0 12px;
-      color: #eff0fa;
-      background: #12141e;
-      border: 1px solid #3a3d50;
-      border-radius: 10px;
-      font: inherit;
-    }
-    .event-dialog input:focus { border-color: var(--purple); outline: 3px solid #393252; }
-    .event-dialog input[type="checkbox"] { width: 17px; min-height: 17px; margin: 0; accent-color: var(--purple); }
-    .check-row { display: flex; align-items: center; gap: 9px; }
-    .check-row label { margin: 14px 0 0; cursor: pointer; }
-    .event-color-label { display: block; margin: 14px 0 8px; color: #d3d5e4; font-size: 13px; font-weight: 600; }
-    .event-color-options { display: flex; flex-wrap: wrap; gap: 9px; }
-    .event-color-option {
-      position: relative;
-      isolation: isolate;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 38px;
-      height: 38px;
-      padding: 0;
-      background: #12141e;
-      border: 1px solid #3a3d50;
-      border-radius: 11px;
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .event-color-option:has(input:checked) { border-color: #a69aff; background: #28253d; box-shadow: 0 0 0 2px rgb(130 114 242 / 30%); }
-    .event-color-option:focus-within { outline: 3px solid #8272f2; outline-offset: 2px; }
-    .event-color-option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
-    .event-color-swatch { position: absolute; z-index: -1; inset: 0; border-radius: 9px; }
-    .event-color-swatch.purple { background: #9b8cff; }
-    .event-color-swatch.green { background: #66c9a5; }
-    .event-color-swatch.orange { background: #e6a754; }
-    .event-color-swatch.pink { background: #e77da4; }
-    .event-color-swatch.blue { background: #71aeea; }
-    .event-color-swatch.red { background: #e76d80; }
-    .event-color-swatch.white { background: #f0f1f5; box-shadow: inset 0 0 0 1px #aeb1bd; }
-    .event-color-swatch.random {
-      background: conic-gradient(#9b8cff 0 16.6%, #66c9a5 16.6% 33.2%, #e6a754 33.2% 49.8%, #e77da4 49.8% 66.4%, #71aeea 66.4% 83%, #e76d80 83% 100%);
-    }
-    .event-color-random {
-      width: auto;
-      padding: 0 10px;
-      gap: 7px;
-      color: #fff;
-      font-size: 12px;
-      text-shadow: 0 1px 3px #11131d;
-      white-space: nowrap;
-    }
-    .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 22px; }
 
     @media (max-width: 700px) {
       .app { width: calc(100% - 24px); margin: 12px auto; border-radius: 18px; }
       .navbar { top: 12px; right: 12px; }
       .topbar { padding: 20px; align-items: center; flex-wrap: wrap; }
       .topbar { padding-right: 66px; }
-      .top-actions .button { width: 40px; padding: 0; font-size: 0; }
-      .top-actions .button svg { width: 18px; height: 18px; }
       main { padding: 22px 16px 24px; }
-      .calendar-head { align-items: flex-start; }
-      .month-title { font-size: 20px; }
-      .month-title span { display: block; margin: 2px 0 0; font-size: 14px; }
-      .day { min-height: 79px; padding: 6px 4px; }
-      .weekday { min-height: 39px; font-size: 11px; }
-      .day-number { width: 25px; height: 25px; font-size: 12px; }
-      .event { padding: 3px 4px; font-size: 9px; }
-      .selection .hint { display: none; }
-      .selected-events, .future-events-list { grid-template-columns: 1fr; }
-      .selected-event { align-items: flex-start; gap: 9px; padding: 10px; }
       .delete-button { min-height: 32px; padding: 0 8px; font-size: 12px; }
       .expense-form { grid-template-columns: 1fr; gap: 15px; padding: 16px; }
       .expense-submit, .expense-status { grid-column: 1; }
@@ -689,7 +464,6 @@
       .expense-item { align-items: flex-start; gap: 8px; padding: 12px; }
       .expense-item-end { flex-direction: column; align-items: flex-end; gap: 8px; }
       .dashboard-card { padding: 16px; }
-      .dashboard-tabs { margin-top: 0; }
       .home-greeting { gap: 9px; }
       .home-greeting-icon { flex-basis: 38px; width: 38px; height: 38px; }
       .home-heading h2 { font-size: 21px; }
@@ -707,18 +481,13 @@
       h1 { font-size: 16px; }
       .subtitle { font-size: 11px; }
       .topbar { padding: 16px 58px 16px 14px; }
-      .month-actions { gap: 5px; }
-      .month-actions .button { width: 34px; min-height: 36px; }
-      .month-actions .today-button { width: auto; padding: 0 9px; margin-right: 0; font-size: 12px; }
-      .day { min-height: 66px; }
-      .event { font-size: 8px; }
     }
   </style>
 </head>
 <body>
   <section class="auth-panel" id="authPanel" aria-labelledby="authHeading">
     <h1 id="authHeading">เชื่อมต่อ Me Life</h1>
-    <p>ลงชื่อเข้าใช้หรือสร้างบัญชีเพื่อซิงก์กิจกรรมและรายจ่าย</p>
+    <p>ลงชื่อเข้าใช้หรือสร้างบัญชีเพื่อซิงก์ข้อมูลรายรับและรายจ่าย</p>
     <form id="authForm">
       <label for="authEmail">อีเมล</label>
       <input id="authEmail" type="email" autocomplete="email" required>
@@ -749,7 +518,6 @@
       </button>
       <div class="navbar-links" id="navbarLinks" hidden>
         <a href="#home" aria-current="page">หน้าแรก</a>
-        <a href="#calendar">ปฏิทิน</a>
         <a href="#expenses">บันทึกรายจ่าย</a>
       </div>
     </nav>
@@ -757,27 +525,15 @@
       <div class="brand">
         <div class="brand-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3.5" y="5" width="17" height="16" rx="3"></rect>
-            <path d="M7.5 3v4M16.5 3v4M3.5 10h17"></path>
-            <path d="m9 15 2 2 4-4"></path>
+            <path d="M4 7.5h15a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a3 3 0 0 1 3-3h12"></path>
+            <path d="M21 12h-5a2 2 0 0 0 0 4h5"></path>
+            <path d="M16.5 14h.01"></path>
           </svg>
         </div>
         <div>
           <h1>ชีวิตของเรา</h1>
-          <p class="subtitle">จัดการวันสำคัญของคุณ <span class="storage-mode">Mock · บันทึกในเครื่อง</span></p>
+          <p class="subtitle">จัดการรายได้และรายจ่าย <span class="storage-mode">Mock · บันทึกในเครื่อง</span></p>
         </div>
-      </div>
-      <div class="top-actions" id="calendarActions" hidden>
-        <button class="button" id="todayTop" type="button" aria-label="กลับไปวันนี้">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9v11h13V9M9 20v-6h6v6"></path>
-          </svg>
-          วันนี้
-        </button>
-        <button class="button button-primary" id="addEvent" type="button" aria-label="เพิ่มกิจกรรม">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
-          เพิ่มกิจกรรม
-        </button>
       </div>
     </header>
 
@@ -786,31 +542,21 @@
         <div class="home-greeting">
           <span class="home-greeting-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3.5" y="5" width="17" height="16" rx="3"></rect>
-              <path d="M7.5 3v4M16.5 3v4M3.5 10h17"></path>
-              <path d="m9 15 2 2 4-4"></path>
+              <path d="M4 7.5h15a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a3 3 0 0 1 3-3h12"></path>
+              <path d="M21 12h-5a2 2 0 0 0 0 4h5"></path>
+              <path d="M16.5 14h.01"></path>
             </svg>
           </span>
           <div class="home-greeting-copy">
             <h2>ว่าไง</h2>
-            <p class="home-tagline">จัดการวันสำคัญของคุณ</p>
+            <p class="home-tagline">จัดการรายได้และรายจ่ายของคุณ</p>
           </div>
         </div>
         <p class="home-date" id="homeDate"></p>
       </section>
       <div class="dashboard-grid">
         <section class="dashboard-card">
-          <div class="dashboard-tabs" role="tablist" aria-label="เนื้อหาหน้าแรก">
-            <button class="dashboard-tab" id="upcomingTab" type="button" role="tab" aria-selected="false" aria-controls="upcomingPanel" tabindex="-1">วันสำคัญที่จะมาถึง</button>
-            <button class="dashboard-tab" id="expensesTab" type="button" role="tab" aria-selected="true" aria-controls="expensesPanel">สรุปรายจ่าย</button>
-          </div>
-          <section class="dashboard-panel" id="upcomingPanel" role="tabpanel" aria-labelledby="upcomingTab" hidden>
-            <h3 id="upcomingHeading">วันสำคัญที่จะมาถึง</h3>
-            <p class="dashboard-card-subtitle">6 รายการถัดไป</p>
-            <div class="upcoming-list" id="upcomingEvents"></div>
-            <a class="dashboard-action" href="#calendar">ดูปฏิทินทั้งหมด →</a>
-          </section>
-          <section class="dashboard-panel" id="expensesPanel" role="tabpanel" aria-labelledby="expensesTab">
+          <section class="dashboard-panel" id="expensesPanel">
             <h3 id="monthlyExpensesHeading">สรุปรายจ่าย</h3>
             <p class="dashboard-card-subtitle" id="dashboardExpenseMonth"></p>
             <div class="expense-summary">
@@ -859,41 +605,10 @@
       </div>
     </main>
 
-    <main id="calendarPage" hidden>
-      <section class="calendar-head" aria-label="เลือกเดือน">
-        <h2 class="month-title" id="monthTitle"></h2>
-        <div class="month-actions">
-          <button class="button today-button" id="todayButton" type="button">วันนี้</button>
-          <button class="button" id="previousMonth" type="button" aria-label="เดือนก่อนหน้า">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
-          </button>
-          <button class="button" id="nextMonth" type="button" aria-label="เดือนถัดไป">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
-          </button>
-        </div>
-      </section>
-
-      <section class="calendar" id="calendar" aria-label="ปฏิทินรายเดือน"></section>
-      <section class="selection" aria-live="polite" aria-label="กิจกรรมวันที่เลือก">
-        <div class="selection-heading">
-          <div>วันที่เลือก: <strong id="selectedDate"></strong></div>
-          <div class="hint">เลือกวันที่เพื่อดูหรือเพิ่มกิจกรรม</div>
-        </div>
-        <div class="selected-events" id="selectedEvents"></div>
-      </section>
-      <section class="future-events" aria-labelledby="futureEventsHeading">
-        <div class="future-events-heading">
-          <h3 id="futureEventsHeading">กิจกรรมในอนาคต</h3>
-          <p>แสดงตั้งแต่วันที่ <strong id="futureEventsDate"></strong> เป็นต้นไป</p>
-        </div>
-        <div class="future-events-list" id="futureEvents" aria-live="polite"></div>
-      </section>
-    </main>
-
     <main id="expensesPage" class="expenses-page" hidden>
       <section class="expenses-heading">
         <h2>บันทึกรายจ่าย</h2>
-        <p>เลือกวันที่และบันทึกรายจ่ายของคุณ แยกจากปฏิทิน</p>
+        <p>เลือกวันที่และบันทึกรายจ่ายของคุณ</p>
       </section>
 
       <section class="income-section" aria-labelledby="monthlyIncomeHeading">
@@ -1017,42 +732,10 @@
     <button class="button" id="signOut" type="button">ออกจากระบบ</button>
   </div>
 
-  <dialog class="event-dialog" id="eventDialog" aria-labelledby="dialogTitle">
-    <form id="eventForm">
-      <h2 id="dialogTitle">เพิ่มกิจกรรม</h2>
-      <p class="dialog-date" id="dialogDate"></p>
-      <label for="eventTitle">ชื่อกิจกรรม</label>
-      <input id="eventTitle" name="eventTitle" type="text" maxlength="80" placeholder="เช่น ประชุมทีม" required autofocus>
-      <label for="eventTime">เวลา <span>(ไม่ระบุ = กิจกรรมทั้งวัน)</span></label>
-      <input id="eventTime" name="eventTime" type="time">
-      <span class="event-color-label" id="eventColorLabel">สีของกิจกรรม</span>
-      <div class="event-color-options" role="radiogroup" aria-labelledby="eventColorLabel">
-        <label class="event-color-option event-color-random" title="สุ่มสี"><input type="radio" name="eventColor" value="random" aria-label="สุ่มสี" checked><span class="event-color-swatch random" aria-hidden="true"></span>สุ่ม</label>
-        <label class="event-color-option" title="ม่วง"><input type="radio" name="eventColor" value="purple" aria-label="ม่วง"><span class="event-color-swatch purple" aria-hidden="true"></span></label>
-        <label class="event-color-option" title="เขียว"><input type="radio" name="eventColor" value="green" aria-label="เขียว"><span class="event-color-swatch green" aria-hidden="true"></span></label>
-        <label class="event-color-option" title="ส้ม"><input type="radio" name="eventColor" value="orange" aria-label="ส้ม"><span class="event-color-swatch orange" aria-hidden="true"></span></label>
-        <label class="event-color-option" title="ชมพู"><input type="radio" name="eventColor" value="pink" aria-label="ชมพู"><span class="event-color-swatch pink" aria-hidden="true"></span></label>
-        <label class="event-color-option" title="ฟ้า"><input type="radio" name="eventColor" value="blue" aria-label="ฟ้า"><span class="event-color-swatch blue" aria-hidden="true"></span></label>
-        <label class="event-color-option" title="แดง"><input type="radio" name="eventColor" value="red" aria-label="แดง"><span class="event-color-swatch red" aria-hidden="true"></span></label>
-        <label class="event-color-option" title="ขาว"><input type="radio" name="eventColor" value="white" aria-label="ขาว"><span class="event-color-swatch white" aria-hidden="true"></span></label>
-      </div>
-      <div class="check-row">
-        <input id="eventYearly" name="eventYearly" type="checkbox">
-        <label for="eventYearly">เกิดซ้ำทุกปี</label>
-      </div>
-      <div class="dialog-actions">
-        <button class="button" id="cancelEvent" type="button">ยกเลิก</button>
-        <button class="button button-primary" type="submit">บันทึกกิจกรรม</button>
-      </div>
-    </form>
-  </dialog>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    let displayedMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    let selectedDate = new Date(today);
     const dataBackendConfig = Object.freeze({
       provider: "supabase",
       supabaseUrl: "https://bkztzyptdppebjzxplla.supabase.co",
@@ -1080,7 +763,6 @@
     let passwordRecoveryMode = false;
     let authGeneration = 0;
     let remoteSyncQueue = Promise.resolve();
-    let remoteEventsById = new Map();
     let remoteExpensesById = new Map();
     let remoteDailySpendingById = new Map();
     let remoteIncomeById = new Map();
@@ -1092,34 +774,6 @@
     }
     document.querySelector(".storage-mode").textContent = "Supabase · ซิงก์ออนไลน์";
 
-    const initialEvents = {
-      "2026-11-3": [{ id: "sample-1", title: "ประชุมทีม", time: "", yearly: false, color: "" }],
-      "2026-11-7": [{ id: "sample-2", title: "วันเกิดคุณแม่", time: "", yearly: true, color: "pink" }],
-      "2026-11-12": [{ id: "sample-3", title: "ส่งงานโปรเจกต์", time: "", yearly: false, color: "orange" }],
-      "2026-11-18": [{ id: "sample-4", title: "นัดทานข้าว", time: "", yearly: false, color: "green" }],
-      "2026-11-25": [{ id: "sample-5", title: "วางแผนประจำเดือน", time: "", yearly: false, color: "" }]
-    };
-    const storageKey = "my-calendar-events";
-    let events;
-    let hasLocalEvents = false;
-    try {
-      const savedEvents = mockStorageAdapter.read(storageKey);
-      hasLocalEvents = savedEvents !== null;
-      events = savedEvents === null ? JSON.parse(JSON.stringify(initialEvents)) : JSON.parse(savedEvents);
-      if (!events || typeof events !== "object" || Array.isArray(events)) {
-        throw new Error("ข้อมูลกิจกรรมต้องเป็นรายการวันที่");
-      }
-    } catch (error) {
-      console.error("ไม่สามารถโหลดกิจกรรมจากเบราว์เซอร์ได้", error);
-      window.alert("ไม่สามารถโหลดกิจกรรมที่บันทึกไว้ได้ กำลังแสดงกิจกรรมตัวอย่างแทน");
-      events = JSON.parse(JSON.stringify(initialEvents));
-    }
-    const weekdayNames = ["อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส."];
-    const eventColorValues = ["purple", "green", "orange", "pink", "blue", "red", "white"];
-    const monthFormatter = new Intl.DateTimeFormat("th-TH", { month: "long" });
-    const dateFormatter = new Intl.DateTimeFormat("th-TH", {
-      day: "numeric", month: "long", year: "numeric"
-    });
     const weekdayDateFormatter = new Intl.DateTimeFormat("th-TH", {
       weekday: "long", day: "numeric", month: "long", year: "numeric"
     });
@@ -1221,10 +875,10 @@
         option.value = String(monthNumber);
         expenseViewMonth.append(option);
       }
-      for (let calendarYear = 1970; calendarYear <= today.getFullYear() + 50; calendarYear += 1) {
+      for (let expenseYearOption = 1970; expenseYearOption <= today.getFullYear() + 50; expenseYearOption += 1) {
         const option = document.createElement("option");
-        option.value = String(calendarYear);
-        option.textContent = `พ.ศ. ${calendarYear + 543}`;
+        option.value = String(expenseYearOption);
+        option.textContent = `พ.ศ. ${expenseYearOption + 543}`;
         expenseViewYear.append(option);
       }
       expenseViewMonth.value = String(selectedExpenseViewMonth.getMonth() + 1);
@@ -1243,10 +897,10 @@
       }
       updateExpenseMonthLabels();
       expenseYear.replaceChildren();
-      for (let calendarYear = 1970; calendarYear <= today.getFullYear() + 50; calendarYear += 1) {
+      for (let expenseYearOption = 1970; expenseYearOption <= today.getFullYear() + 50; expenseYearOption += 1) {
         const option = document.createElement("option");
-        option.value = String(calendarYear);
-        option.textContent = `พ.ศ. ${calendarYear + 543}`;
+        option.value = String(expenseYearOption);
+        option.textContent = `พ.ศ. ${expenseYearOption + 543}`;
         expenseYear.append(option);
       }
       expenseMonth.value = String(month);
@@ -1306,18 +960,6 @@
       return dateKey(date);
     }
 
-    function eventRowsFromState(userId, source = events) {
-      return Object.entries(source).flatMap(([eventDate, items]) => items.map((item) => ({
-        id: `${userId}:${item.id}`,
-        user_id: userId,
-        event_date: toDatabaseDate(eventDate),
-        title: item.title,
-        event_time: item.time || null,
-        yearly: Boolean(item.yearly),
-        color: eventColorValues.includes(item.color) ? item.color : "purple"
-      })));
-    }
-
     function expenseRowsFromState(userId, source = expenses) {
       return Object.entries(source).flatMap(([expenseDate, items]) => items.map((item) => ({
         id: `${userId}:${item.id}`,
@@ -1351,18 +993,6 @@
       }));
     }
 
-    function normalizeEventRow(row) {
-      return {
-        id: row.id,
-        user_id: row.user_id,
-        event_date: row.event_date,
-        title: row.title,
-        event_time: row.event_time ? row.event_time.slice(0, 5) : null,
-        yearly: row.yearly === true,
-        color: eventColorValues.includes(row.color) ? row.color : "purple"
-      };
-    }
-
     function normalizeExpenseRow(row) {
       return {
         id: row.id,
@@ -1394,21 +1024,6 @@
         title: row.title,
         amount: Number(row.amount)
       };
-    }
-
-    function eventsFromDatabase(rows) {
-      return rows.reduce((grouped, row) => {
-        const eventDate = fromDatabaseDate(row.event_date);
-        const item = {
-          id: row.id.startsWith(`${row.user_id}:`) ? row.id.slice(row.user_id.length + 1) : row.id,
-          title: row.title,
-          time: row.event_time ? row.event_time.slice(0, 5) : "",
-          yearly: row.yearly === true,
-          color: eventColorValues.includes(row.color) ? row.color : "purple"
-        };
-        (grouped[eventDate] ||= []).push(item);
-        return grouped;
-      }, {});
     }
 
     function expensesFromDatabase(rows) {
@@ -1543,11 +1158,9 @@
 
     function persistRemoteSnapshot() {
       try {
-        mockStorageAdapter.write(storageKey, JSON.stringify(events));
         mockStorageAdapter.write(expenseStorageKey, JSON.stringify(expenses));
         mockStorageAdapter.write(dailySpendingStorageKey, JSON.stringify(dailySpending));
         mockStorageAdapter.write(incomeStorageKey, JSON.stringify(incomeEntries));
-        hasLocalEvents = true;
         hasLocalExpenses = true;
         hasLocalDailySpending = true;
         hasLocalIncome = true;
@@ -1560,14 +1173,12 @@
     function enqueueRemoteSync() {
       if (!remoteDataReady || !activeUserId) return;
       const userId = activeUserId;
-      const eventRows = eventRowsFromState(userId);
       const expenseRows = expenseRowsFromState(userId);
       const dailySpendingRows = dailySpendingRowsFromState(userId);
       const incomeRows = incomeRowsFromState(userId);
       setSyncStatus("กำลังซิงก์...");
       remoteSyncQueue = remoteSyncQueue.then(async () => {
         if (!remoteDataReady || activeUserId !== userId) return;
-        await syncRows("calendar_events", eventRows, remoteEventsById);
         await syncRows("expenses", expenseRows, remoteExpensesById);
         await syncRows("daily_spending", dailySpendingRows, remoteDailySpendingById);
         await syncRows("income_entries", incomeRows, remoteIncomeById);
@@ -1591,8 +1202,7 @@
       setSyncStatus("กำลังโหลดข้อมูล...");
 
       try {
-        const [remoteEvents, remoteExpenses, remoteDailySpending, remoteIncome] = await Promise.all([
-          fetchAllRows("calendar_events", "event_date"),
+        const [remoteExpenses, remoteDailySpending, remoteIncome] = await Promise.all([
           fetchAllRows("expenses", "expense_date"),
           fetchAllRows("daily_spending", "spending_date"),
           fetchAllRows("income_entries", "income_date")
@@ -1600,15 +1210,6 @@
         if (generation !== authGeneration || activeUserId !== user.id) return;
 
         const canImportLocalData = supabaseOwnerId === null || supabaseOwnerId === user.id;
-        if (remoteEvents.length > 0) {
-          events = eventsFromDatabase(remoteEvents);
-        } else if (canImportLocalData && hasLocalEvents && eventRowsFromState(user.id).length > 0) {
-          events = { ...events };
-          await syncRows("calendar_events", eventRowsFromState(user.id), remoteEventsById);
-        } else {
-          events = {};
-        }
-
         if (remoteExpenses.length > 0) {
           expenses = expensesFromDatabase(remoteExpenses);
         } else if (canImportLocalData && hasLocalExpenses && expenseRowsFromState(user.id).length > 0) {
@@ -1635,9 +1236,6 @@
         }
         if (generation !== authGeneration || activeUserId !== user.id) return;
 
-        const eventBaseline = remoteEvents.length > 0
-          ? remoteEvents.map(normalizeEventRow)
-          : eventRowsFromState(user.id);
         const expenseBaseline = remoteExpenses.length > 0
           ? remoteExpenses.map(normalizeExpenseRow)
           : expenseRowsFromState(user.id);
@@ -1647,7 +1245,6 @@
         const incomeBaseline = remoteIncome.length > 0
           ? remoteIncome.map(normalizeIncomeRow)
           : incomeRowsFromState(user.id);
-        remoteEventsById = new Map(eventBaseline.map((row) => [row.id, row]));
         remoteExpensesById = new Map(expenseBaseline.map((row) => [row.id, row]));
         remoteDailySpendingById = new Map(dailySpendingBaseline.map((row) => [row.id, row]));
         remoteIncomeById = new Map(incomeBaseline.map((row) => [row.id, row]));
@@ -1658,7 +1255,6 @@
           console.error("ไม่สามารถบันทึกเจ้าของข้อมูลในเครื่องได้", error);
         }
         persistRemoteSnapshot();
-        renderCalendar();
         renderExpenses();
         renderDailySpending();
         renderMonthlyIncome();
@@ -1686,7 +1282,7 @@
     }
 
     function showSignInForm(message = "") {
-      document.getElementById("authHeading").textContent = "เชื่อมต่อปฏิทิน";
+      document.getElementById("authHeading").textContent = "เชื่อมต่อบัญชี";
       document.getElementById("authForm").hidden = false;
       document.getElementById("passwordRecoveryForm").hidden = true;
       document.getElementById("authStatus").textContent = message;
@@ -1711,7 +1307,6 @@
         activeUser = null;
         activeUserId = null;
         remoteDataReady = false;
-        remoteEventsById = new Map();
         remoteExpensesById = new Map();
         remoteDailySpendingById = new Map();
         remoteIncomeById = new Map();
@@ -2189,57 +1784,6 @@
     function renderDashboard() {
       document.getElementById("homeDate").textContent = expenseDateFormatter.format(today);
 
-      const upcomingEvents = [];
-      const now = new Date();
-      const lastSearchDate = new Date(today.getFullYear() + 8, today.getMonth(), today.getDate());
-      for (let date = new Date(today); date <= lastSearchDate && upcomingEvents.length < 6; date.setDate(date.getDate() + 1)) {
-        getEventsForDate(date).forEach((item) => {
-          if (date.getTime() === today.getTime() && item.time) {
-            const [hours, minutes] = item.time.split(":").map(Number);
-            if (hours * 60 + minutes < now.getHours() * 60 + now.getMinutes()) return;
-          }
-          upcomingEvents.push({ ...item, date: new Date(date) });
-        });
-      }
-      upcomingEvents.sort((first, second) =>
-        first.date - second.date || (first.time || "").localeCompare(second.time || ""));
-
-      const upcomingList = document.getElementById("upcomingEvents");
-      upcomingList.replaceChildren();
-      if (upcomingEvents.length === 0) {
-        const empty = document.createElement("div");
-        empty.className = "dashboard-empty";
-        empty.textContent = "ยังไม่มีนัดหมายที่กำลังจะมาถึง";
-        upcomingList.append(empty);
-      } else {
-        upcomingEvents.slice(0, 6).forEach((item) => {
-          const link = document.createElement("a");
-          link.className = "upcoming-item";
-          link.href = "#calendar";
-
-          const dateBadge = document.createElement("span");
-          const eventColor = eventColorValues.includes(item.color) ? item.color : "purple";
-          dateBadge.className = `upcoming-date ${eventColor}`;
-          dateBadge.textContent = new Intl.DateTimeFormat("th-TH", { day: "numeric", month: "short" }).format(item.date);
-          const details = document.createElement("span");
-          details.className = "upcoming-details";
-          const title = document.createElement("span");
-          title.className = "upcoming-title";
-          title.textContent = item.title;
-          const meta = document.createElement("span");
-          meta.className = "upcoming-meta";
-          meta.textContent = `${weekdayDateFormatter.format(item.date)}${item.time ? ` - ${item.time} น.` : " - ทั้งวัน"}`;
-          details.append(title, meta);
-          link.append(dateBadge, details);
-          link.addEventListener("click", () => {
-            selectedDate = new Date(item.date);
-            displayedMonth = new Date(item.date.getFullYear(), item.date.getMonth(), 1);
-            renderCalendar();
-          });
-          upcomingList.append(link);
-        });
-      }
-
       const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
       const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
       const currentPeriod = monthPeriodKey(today);
@@ -2335,7 +1879,7 @@
           const amount = item.amount !== "" && item.amount !== undefined && Number.isFinite(Number(item.amount))
             ? ` · ${currencyFormatter.format(Number(item.amount))}`
             : "";
-          meta.textContent = `${dateFormatter.format(item.date)}${amount}`;
+          meta.textContent = `${expenseDateFormatter.format(item.date)}${amount}`;
           details.append(title, meta);
           row.append(dateBadge, details);
           upcomingExpenseList.append(row);
@@ -2345,14 +1889,11 @@
 
     function setActivePage() {
       const showExpenses = window.location.hash === "#expenses";
-      const showCalendar = window.location.hash === "#calendar";
-      document.querySelector(".app").classList.toggle("home-active", !showExpenses && !showCalendar);
-      document.getElementById("homePage").hidden = showExpenses || showCalendar;
-      document.getElementById("calendarPage").hidden = showExpenses || !showCalendar;
+      document.querySelector(".app").classList.toggle("home-active", !showExpenses);
+      document.getElementById("homePage").hidden = showExpenses;
       document.getElementById("expensesPage").hidden = !showExpenses;
-      document.getElementById("calendarActions").hidden = !showCalendar;
       document.querySelectorAll(".navbar-links a").forEach((link) => {
-        const activeHash = showExpenses ? "#expenses" : showCalendar ? "#calendar" : "#home";
+        const activeHash = showExpenses ? "#expenses" : "#home";
         if (link.hash === activeHash) link.setAttribute("aria-current", "page");
         else link.removeAttribute("aria-current");
       });
@@ -2365,32 +1906,6 @@
       toggle.setAttribute("aria-label", isOpen ? "ปิดเมนู" : "เปิดเมนู");
       document.getElementById("navbarLinks").hidden = !isOpen;
     }
-
-    function setDashboardTab(tabId) {
-      document.querySelectorAll(".dashboard-tab").forEach((tab) => {
-        const selected = tab.id === tabId;
-        tab.setAttribute("aria-selected", String(selected));
-        tab.tabIndex = selected ? 0 : -1;
-        document.getElementById(tab.getAttribute("aria-controls")).hidden = !selected;
-      });
-    }
-
-    const dashboardTabs = [...document.querySelectorAll(".dashboard-tab")];
-    dashboardTabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => setDashboardTab(tab.id));
-      tab.addEventListener("keydown", (event) => {
-        const direction = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
-        const targetIndex = event.key === "Home" ? 0
-          : event.key === "End" ? dashboardTabs.length - 1
-            : direction ? (index + direction + dashboardTabs.length) % dashboardTabs.length
-              : -1;
-        if (targetIndex < 0) return;
-        event.preventDefault();
-        const targetTab = dashboardTabs[targetIndex];
-        setDashboardTab(targetTab.id);
-        targetTab.focus();
-      });
-    });
 
     populateExpenseDate(selectedExpenseDate);
     dailySpendingDate.value = toDatabaseDate(dateKey(today));
@@ -2601,276 +2116,6 @@
       return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
     }
 
-    function getEventsForDate(date) {
-      const key = dateKey(date);
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      return Object.entries(events).flatMap(([sourceDate, items]) => {
-        const [, sourceMonth, sourceDay] = sourceDate.split("-").map(Number);
-        return items
-          .filter((item) => sourceDate === key || (item.yearly && sourceMonth === month && sourceDay === day))
-          .map((item) => ({ ...item, sourceDate }));
-      }).sort((first, second) => (first.time || "").localeCompare(second.time || ""));
-    }
-
-    function getNextEventDate(sourceDate, fromDate, yearly) {
-      const [sourceYear, sourceMonth, sourceDay] = sourceDate.split("-").map(Number);
-      if (!Number.isInteger(sourceYear) || !Number.isInteger(sourceMonth) ||
-          !Number.isInteger(sourceDay) || sourceMonth < 1 || sourceMonth > 12 ||
-          sourceDay < 1 || sourceDay > new Date(sourceYear, sourceMonth, 0).getDate()) {
-        return null;
-      }
-
-      const originalDate = new Date(sourceYear, sourceMonth - 1, sourceDay);
-      if (!yearly) return originalDate > fromDate ? originalDate : null;
-
-      for (let year = fromDate.getFullYear(); year <= fromDate.getFullYear() + 8; year += 1) {
-        const occurrence = new Date(year, sourceMonth - 1, sourceDay);
-        if (occurrence.getMonth() === sourceMonth - 1 && occurrence.getDate() === sourceDay &&
-            occurrence > fromDate) {
-          return occurrence;
-        }
-      }
-      return null;
-    }
-
-    function renderFutureEvents() {
-      const list = document.getElementById("futureEvents");
-      list.replaceChildren();
-      document.getElementById("futureEventsDate").textContent = dateFormatter.format(selectedDate);
-
-      const fromDate = new Date(selectedDate);
-      fromDate.setHours(0, 0, 0, 0);
-      const upcomingEvents = Object.entries(events).flatMap(([sourceDate, items]) =>
-        items.flatMap((item) => {
-          const date = getNextEventDate(sourceDate, fromDate, item.yearly);
-          return date ? [{ ...item, sourceDate, date }] : [];
-        })
-      ).sort((first, second) =>
-        first.date - second.date ||
-        (first.time || "").localeCompare(second.time || "") ||
-        first.title.localeCompare(second.title, "th"));
-
-      if (upcomingEvents.length === 0) {
-        const empty = document.createElement("div");
-        empty.className = "dashboard-empty";
-        empty.textContent = "ไม่มีกิจกรรมที่กำหนดไว้หลังวันที่เลือก";
-        list.append(empty);
-        return;
-      }
-
-      upcomingEvents.forEach((item) => {
-        const row = document.createElement("article");
-        row.className = "future-event-card";
-        const dateBadge = document.createElement("span");
-        dateBadge.className = "upcoming-date";
-        dateBadge.textContent = new Intl.DateTimeFormat("th-TH", {
-          day: "numeric", month: "short"
-        }).format(item.date);
-
-        const details = document.createElement("span");
-        details.className = "upcoming-details";
-        const title = document.createElement("span");
-        title.className = "upcoming-title";
-        title.textContent = item.title;
-        const meta = document.createElement("span");
-        meta.className = "upcoming-meta";
-        meta.textContent = `${dateFormatter.format(item.date)}${item.time ? ` · ${item.time} น.` : " · ทั้งวัน"}${item.yearly ? " · เกิดซ้ำทุกปี" : ""}`;
-        details.append(title, meta);
-
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "delete-button";
-        deleteButton.type = "button";
-        deleteButton.textContent = "ลบ";
-        deleteButton.setAttribute("aria-label", `ลบกิจกรรม ${item.title}`);
-        deleteButton.addEventListener("click", () => deleteEvent(item.sourceDate, item.id));
-
-        row.append(dateBadge, details, deleteButton);
-        list.append(row);
-      });
-    }
-
-    function saveEvents() {
-      try {
-        mockStorageAdapter.write(storageKey, JSON.stringify(events));
-        hasLocalEvents = true;
-        enqueueRemoteSync();
-        return true;
-      } catch (error) {
-        console.error("ไม่สามารถบันทึกกิจกรรมลงในเบราว์เซอร์ได้", error);
-        window.alert("บันทึกกิจกรรมไม่สำเร็จ กรุณาตรวจสอบพื้นที่จัดเก็บของเบราว์เซอร์");
-        return false;
-      }
-    }
-
-    function deleteEvent(sourceDate, eventId) {
-      const previousEvents = JSON.stringify(events);
-      events[sourceDate] = events[sourceDate].filter((item) => item.id !== eventId);
-      if (events[sourceDate].length === 0) delete events[sourceDate];
-      if (!saveEvents()) {
-        events = JSON.parse(previousEvents);
-        return;
-      }
-      renderCalendar();
-      renderDashboard();
-    }
-
-    function renderCalendar() {
-      const month = displayedMonth.getMonth();
-      const year = displayedMonth.getFullYear();
-      document.getElementById("monthTitle").innerHTML =
-        `${monthFormatter.format(displayedMonth)}<span>${new Intl.DateTimeFormat("th-TH", { year: "numeric" }).format(displayedMonth)}</span>`;
-
-      const calendar = document.getElementById("calendar");
-      calendar.replaceChildren();
-      weekdayNames.forEach((name) => {
-        const heading = document.createElement("div");
-        heading.className = "weekday";
-        heading.textContent = name;
-        calendar.append(heading);
-      });
-
-      const firstDay = new Date(year, month, 1);
-      const start = new Date(year, month, 1 - firstDay.getDay());
-      const totalDays = Math.ceil((firstDay.getDay() + new Date(year, month + 1, 0).getDate()) / 7) * 7;
-
-      for (let offset = 0; offset < totalDays; offset += 1) {
-        const date = new Date(start);
-        date.setDate(start.getDate() + offset);
-        const key = dateKey(date);
-        const day = document.createElement("button");
-        day.type = "button";
-        day.className = "day";
-        day.setAttribute("aria-label", dateFormatter.format(date));
-        if (date.getMonth() !== month) day.classList.add("outside-month");
-        if (date.getTime() === today.getTime()) day.classList.add("today");
-        if (date.getTime() === selectedDate.getTime()) day.classList.add("selected");
-
-        const number = document.createElement("span");
-        number.className = "day-number";
-        number.textContent = new Intl.NumberFormat("th-TH", { useGrouping: false }).format(date.getDate());
-        day.append(number);
-
-        const dayEvents = getEventsForDate(date);
-        dayEvents.slice(0, 2).forEach((item) => {
-          const event = document.createElement("span");
-          const color = eventColorValues.includes(item.color) ? item.color : "purple";
-          event.className = `event ${color}`;
-          event.textContent = item.title;
-          day.append(event);
-        });
-        if (dayEvents.length > 2) {
-          const more = document.createElement("span");
-          more.className = "event";
-          more.textContent = `+${dayEvents.length - 2} เพิ่มเติม`;
-          day.append(more);
-        }
-
-        day.addEventListener("click", () => {
-          selectedDate = date;
-          if (date.getMonth() !== displayedMonth.getMonth() || date.getFullYear() !== displayedMonth.getFullYear()) {
-            displayedMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-          }
-          renderCalendar();
-        });
-        calendar.append(day);
-      }
-
-      document.getElementById("selectedDate").textContent = dateFormatter.format(selectedDate);
-      const selectedEvents = document.getElementById("selectedEvents");
-      selectedEvents.replaceChildren();
-      getEventsForDate(selectedDate).forEach((item) => {
-        const row = document.createElement("article");
-        row.className = "selected-event";
-
-        const dateBadge = document.createElement("span");
-        dateBadge.className = "upcoming-date";
-        dateBadge.textContent = new Intl.DateTimeFormat("th-TH", {
-          day: "numeric", month: "short"
-        }).format(selectedDate);
-
-        const details = document.createElement("span");
-        details.className = "upcoming-details";
-        const name = document.createElement("span");
-        const color = eventColorValues.includes(item.color) ? item.color : "purple";
-        name.className = `upcoming-title event-name ${color}`;
-        name.textContent = item.title;
-        const meta = document.createElement("span");
-        meta.className = "upcoming-meta";
-        meta.textContent = `${dateFormatter.format(selectedDate)} · ${item.time ? `${item.time} น.` : "ทั้งวัน"}${item.yearly ? " · เกิดซ้ำทุกปี" : ""}`;
-        details.append(name, meta);
-
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "delete-button";
-        deleteButton.type = "button";
-        deleteButton.textContent = "ลบ";
-        deleteButton.setAttribute("aria-label", `ลบกิจกรรม ${item.title}`);
-        deleteButton.addEventListener("click", () => deleteEvent(item.sourceDate, item.id));
-
-        row.append(dateBadge, details, deleteButton);
-        selectedEvents.append(row);
-      });
-      renderFutureEvents();
-    }
-
-    function goToToday() {
-      selectedDate = new Date(today);
-      displayedMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-      renderCalendar();
-    }
-
-    document.getElementById("previousMonth").addEventListener("click", () => {
-      displayedMonth.setMonth(displayedMonth.getMonth() - 1);
-      renderCalendar();
-    });
-    document.getElementById("nextMonth").addEventListener("click", () => {
-      displayedMonth.setMonth(displayedMonth.getMonth() + 1);
-      renderCalendar();
-    });
-    document.getElementById("todayButton").addEventListener("click", goToToday);
-    document.getElementById("todayTop").addEventListener("click", goToToday);
-    const eventDialog = document.getElementById("eventDialog");
-    const eventTitle = document.getElementById("eventTitle");
-    const eventTime = document.getElementById("eventTime");
-    const eventYearly = document.getElementById("eventYearly");
-    document.getElementById("addEvent").addEventListener("click", () => {
-      eventTitle.value = "";
-      eventTime.value = "";
-      eventYearly.checked = false;
-      document.querySelector('input[name="eventColor"][value="random"]').checked = true;
-      eventTitle.setCustomValidity("");
-      document.getElementById("dialogDate").textContent = dateFormatter.format(selectedDate);
-      eventDialog.showModal();
-      eventTitle.focus();
-    });
-    document.getElementById("cancelEvent").addEventListener("click", () => eventDialog.close());
-    document.getElementById("eventForm").addEventListener("submit", (event) => {
-      event.preventDefault();
-      const title = eventTitle.value.trim();
-      const selectedColor = document.querySelector('input[name="eventColor"]:checked')?.value || "random";
-      eventTitle.setCustomValidity(title ? "" : "กรุณาระบุชื่อกิจกรรม");
-      if (!title) {
-        eventTitle.reportValidity();
-        return;
-      }
-      const key = dateKey(selectedDate);
-      events[key] = [...(events[key] || []), {
-        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        title,
-        time: eventTime.value,
-        yearly: eventYearly.checked,
-        color: eventColorValues.includes(selectedColor)
-          ? selectedColor
-          : eventColorValues[Math.floor(Math.random() * eventColorValues.length)]
-      }];
-      saveEvents();
-      eventDialog.close();
-      renderCalendar();
-      renderDashboard();
-    });
-    eventTitle.addEventListener("input", () => eventTitle.setCustomValidity(""));
-
-    renderCalendar();
   </script>
 </body>
 </html>
