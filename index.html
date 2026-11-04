@@ -227,10 +227,31 @@
       background: linear-gradient(135deg, #302a49, #211f33);
       border-color: #514777;
     }
+    .expense-summary-row.month-income-remaining > span:nth-of-type(2) { margin-top: auto; }
     .expense-summary-row.month-income-remaining > span, .expense-summary-row.month-income-remaining strong { color: #c4baff; }
     .expense-summary-row.month-income-remaining strong { font-size: 20px; }
     .expense-summary-row.month-income-total > span, .expense-summary-row.month-income-total strong { color: #8dd8bd; }
-    .expense-summary-row.daily-average > span, .expense-summary-row.daily-average strong { color: #f1c27d; }
+    .expense-summary-row.month-income-total {
+      display: block;
+      grid-column: 1 / -1;
+      padding: 18px;
+      background: linear-gradient(145deg, #203b35, #192b29);
+      border-color: #376452;
+    }
+    .month-income-total > span { display: block; font-size: 13px; }
+    .month-income-total > strong { display: block; margin-top: 6px; font-size: 30px; }
+    .income-expense-breakdown { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+    .income-expense-breakdown .expense-summary-row {
+      min-height: 72px;
+      gap: 8px;
+      padding: 11px;
+      background: rgb(14 22 22 / 45%);
+      border-color: rgb(141 216 189 / 20%);
+    }
+    .income-expense-breakdown .expense-summary-row > span { font-size: 11px; }
+    .income-expense-breakdown .expense-summary-row strong { font-size: 16px; }
+    .income-expense-breakdown .expense-summary-count { padding: 0 4px; }
+    #dashboardDailyAverageRemaining { color: var(--daily-average-color, #ff3030); transition: color .25s ease; }
     .expense-summary-count { grid-column: 1 / -1; margin: 2px 0 0; color: var(--muted); font-size: 12px; }
     @media (max-width: 480px) {
       .expense-summary { gap: 8px; }
@@ -257,7 +278,27 @@
     .expenses-heading { margin-bottom: 24px; }
     .expenses-heading h2 { margin: 0; font-size: 25px; }
     .expenses-heading p { margin: 5px 0 0; color: var(--muted); font-size: 14px; }
-    .daily-spending { margin-top: 24px; }
+    .expense-period-picker { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 14px; }
+    .expense-period-picker h3 { margin: 0; font-size: 15px; }
+    .expense-tabs { display: flex; gap: 5px; width: fit-content; max-width: 100%; margin-bottom: 14px; padding: 5px; background: var(--surface); border: 1px solid #393c50; border-radius: 12px; }
+    .expense-tab {
+      min-height: 40px;
+      padding: 0 14px;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      border-radius: 9px;
+      font: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color .18s ease, background .18s ease;
+    }
+    .expense-tab[aria-selected="true"], .expense-tab:hover { color: #e8e4ff; background: #2b2e42; }
+    .expense-tab:focus-visible { outline: 3px solid #a69aff; outline-offset: 2px; }
+    .expense-workspace { min-height: 260px; padding: 20px; background: var(--surface-raised); border: 1px solid var(--line); border-radius: 16px; }
+    .expense-tab-panel[hidden] { display: none; }
+    .expense-panel-heading { margin: 0 0 16px; font-size: 20px; }
+    .daily-spending { margin-top: 0; }
     .daily-spending h3 { margin: 0; font-size: 20px; }
     .daily-spending-description { margin: 5px 0 14px; color: var(--muted); font-size: 13px; line-height: 1.6; }
     .daily-spending-summary {
@@ -289,7 +330,7 @@
     .daily-spending-entry-amount { flex: 0 0 auto; white-space: nowrap; }
     .daily-spending-delete { flex: 0 0 auto; min-height: 28px; padding: 0 7px; font-size: 11px; }
     .daily-spending-empty { padding: 16px; color: var(--muted); text-align: center; background: #1b1e2c; border: 1px dashed #3a3d50; border-radius: 12px; }
-    .income-section { margin: 0 0 24px; }
+    .income-section { margin: 0; }
     .income-section h3 { margin: 0; font-size: 20px; }
     .income-section .daily-spending-summary { margin-top: 12px; }
     .income-section .daily-spending-summary span, .income-section .daily-spending-summary strong,
@@ -339,7 +380,7 @@
     .recurrence-option { display: inline-flex; align-items: center; gap: 8px; color: #d3d5e4; font-size: 13px; cursor: pointer; }
     .recurrence-option input { width: 17px; height: 17px; margin: 0; accent-color: var(--purple); }
     .expense-submit { grid-column: 1 / -1; justify-self: end; }
-    .expenses-list { margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--line); }
+    .expenses-list { margin-top: 24px; padding-top: 0; border-top: 0; }
     .expenses-list-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px; }
     .expenses-list-heading h3 { margin: 0; font-size: 20px; }
     .expenses-list-count { justify-content: flex-end; margin: -7px 0 12px; }
@@ -418,6 +459,9 @@
       .expense-submit { justify-self: stretch; }
       .expense-submit .button { width: 100%; }
       .expenses-heading h2 { font-size: 21px; }
+      .expense-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
+      .expense-tab { padding: 0 6px; font-size: 12px; }
+      .expense-workspace { padding: 16px; }
       .expense-item { align-items: flex-start; gap: 8px; padding: 12px; }
       .expense-item-end { flex-direction: column; align-items: flex-end; gap: 8px; }
       .dashboard-card { padding: 16px; }
@@ -425,6 +469,7 @@
       .home-greeting-icon { flex-basis: 38px; width: 38px; height: 38px; }
       .home-heading h2 { font-size: 21px; }
       .expenses-list-heading { align-items: flex-start; flex-direction: column; }
+      .expense-period-picker { align-items: flex-start; flex-direction: column; }
       .expense-view-date { width: 100%; gap: 10px; }
       .expense-view-date select { flex: 1; min-height: 48px; padding: 0 14px; font-size: 15px; }
       .expense-current-month { min-height: 48px; padding: 0 10px; }
@@ -524,32 +569,32 @@
               <div class="expense-summary-row month-income-remaining">
                 <span>เงินคงเหลือเดือนนี้</span>
                 <strong id="dashboardMonthIncomeRemaining"></strong>
+                <span>คงเหลือเฉลี่ยรายวัน</span>
+                <strong id="dashboardDailyAverageRemaining"></strong>
               </div>
               <div class="expense-summary-row month-income-total">
                 <span>รายได้เดือนนี้</span>
                 <strong id="dashboardMonthIncomeTotal"></strong>
+                <div class="income-expense-breakdown">
+                  <div class="expense-summary-row total">
+                    <span>รายจ่ายทั้งหมด</span>
+                    <strong id="dashboardExpenseTotal"></strong>
+                  </div>
+                  <div class="expense-summary-row paid">
+                    <span>รายจ่ายรายเดือนที่จ่ายแล้ว</span>
+                    <strong id="dashboardExpensePaid"></strong>
+                  </div>
+                  <div class="expense-summary-row month-spent">
+                    <span>เดือนนี้ใช้ไปแล้ว</span>
+                    <strong id="dashboardMonthSpent"></strong>
+                  </div>
+                  <div class="expense-summary-row remaining">
+                    <span>ค่าใช้จ่ายรายเดือนที่เหลือ</span>
+                    <strong id="dashboardExpenseRemaining"></strong>
+                  </div>
+                  <p class="expense-summary-count" id="dashboardExpenseCount"></p>
+                </div>
               </div>
-              <div class="expense-summary-row daily-average">
-                <span>คงเหลือเฉลี่ยรายวัน</span>
-                <strong id="dashboardDailyAverageRemaining"></strong>
-              </div>
-              <div class="expense-summary-row total">
-                <span>รายจ่ายทั้งหมด</span>
-                <strong id="dashboardExpenseTotal"></strong>
-              </div>
-              <div class="expense-summary-row paid">
-                <span>รายจ่ายรายเดือนที่จ่ายแล้ว</span>
-                <strong id="dashboardExpensePaid"></strong>
-              </div>
-              <div class="expense-summary-row month-spent">
-                <span>เดือนนี้ใช้ไปแล้ว</span>
-                <strong id="dashboardMonthSpent"></strong>
-              </div>
-              <div class="expense-summary-row remaining">
-                <span>ค่าใช้จ่ายรายเดือนที่เหลือ</span>
-                <strong id="dashboardExpenseRemaining"></strong>
-              </div>
-              <p class="expense-summary-count" id="dashboardExpenseCount"></p>
             </div>
             <a class="dashboard-action" href="#expenses">ดูรายการรายจ่าย →</a>
           </section>
@@ -563,118 +608,142 @@
         <p>เลือกวันที่และบันทึกรายจ่ายของคุณ</p>
       </section>
 
-      <section class="income-section" aria-labelledby="monthlyIncomeHeading">
-        <h3 id="monthlyIncomeHeading">รายได้เดือนนี้</h3>
-        <p class="daily-spending-description">เพิ่มรายได้แต่ละรายการ ระบบรวมยอดแยกตามเดือนและเก็บประวัติไว้</p>
-        <div class="daily-spending-summary" aria-live="polite">
-          <span>รายได้รวมเดือนนี้</span>
-          <strong id="monthlyIncomeTotal"></strong>
+      <div class="expense-period-picker">
+        <h3>เดือนที่แสดง</h3>
+        <div class="expense-view-date">
+          <select id="expenseViewMonth" aria-label="เดือนที่ต้องการดู"></select>
+          <select id="expenseViewYear" aria-label="ปีที่ต้องการดู"></select>
+          <button class="button expense-current-month" id="currentExpenseMonth" type="button">เดือนนี้</button>
         </div>
-        <form class="expense-form" id="incomeForm">
-          <div class="expense-field">
-            <label for="incomeTitle">รายละเอียดรายได้</label>
-            <input id="incomeTitle" type="text" maxlength="100" placeholder="เช่น เงินเดือน">
-          </div>
-          <div class="expense-field">
-            <label for="incomeAmount">จำนวนเงิน</label>
-            <input id="incomeAmount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="ระบุจำนวนเงิน" required>
-          </div>
-          <div class="expense-field">
-            <label for="incomeDate">วันที่ได้รับ</label>
-            <input id="incomeDate" type="date" required>
-          </div>
-          <p class="expense-status" id="incomeStatus" aria-live="polite"></p>
-          <div class="expense-submit">
-            <button class="button button-primary" type="submit">เพิ่มรายได้</button>
-          </div>
-        </form>
-        <div class="daily-spending-days" id="monthlyIncomeEntries" aria-live="polite"></div>
-      </section>
+      </div>
 
-      <form class="expense-form" id="expenseForm">
-        <div class="expense-field">
-          <label for="expenseTitle">รายการ</label>
-          <input id="expenseTitle" name="expenseTitle" type="text" maxlength="100" placeholder="เช่น ค่าเดินทาง" required>
-        </div>
-        <div class="expense-field">
-          <label for="expenseAmount">จำนวนเงิน (ไม่บังคับ)</label>
-          <input id="expenseAmount" name="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="เว้นว่างเพื่อบันทึกเป็นรายการ">
-        </div>
-        <div class="expense-field">
-          <span class="expense-date-label">วันที่</span>
-          <div class="date-selects">
-            <select id="expenseDay" aria-label="วัน"></select>
-            <select id="expenseMonth" aria-label="เดือน"></select>
-            <select id="expenseYear" aria-label="ปี"></select>
-          </div>
-        </div>
-        <div class="expense-field">
-          <span class="expense-date-label">เกิดซ้ำ</span>
-          <div class="recurrence-options">
-            <label class="recurrence-option"><input id="expenseMonthly" type="checkbox"> รายเดือน</label>
-            <label class="recurrence-option"><input id="expenseYearly" type="checkbox"> รายปี</label>
-          </div>
-        </div>
-        <p class="expense-status" id="expenseStatus" aria-live="polite"></p>
-        <div class="expense-submit">
-          <button class="button button-primary" type="submit">บันทึกรายจ่าย</button>
-        </div>
-      </form>
+      <div class="expense-tabs" role="tablist" aria-label="ประเภทข้อมูลรายรับและรายจ่าย">
+        <button class="expense-tab" id="incomeTab" type="button" role="tab" aria-controls="incomePanel" aria-selected="true" tabindex="0">รายได้</button>
+        <button class="expense-tab" id="dailySpendingTab" type="button" role="tab" aria-controls="dailySpendingPanel" aria-selected="false" tabindex="-1">เงินใช้จ่ายรายวัน</button>
+        <button class="expense-tab" id="monthlyExpensesTab" type="button" role="tab" aria-controls="monthlyExpensesPanel" aria-selected="false" tabindex="-1">รายจ่ายประจำเดือน</button>
+      </div>
 
-      <section class="daily-spending" aria-labelledby="dailySpendingHeading">
-        <h3 id="dailySpendingHeading">เงินใช้จ่ายรายวัน</h3>
-        <p class="daily-spending-description">บันทึกค่าใช้จ่ายที่เกิดขึ้นจริงพร้อมวันที่และจำนวนเงิน ยอดส่วนนี้แยกจากรายจ่ายประจำเดือนและสรุปยอดใช้จ่ายรายวันของเดือนที่เลือก</p>
-        <form class="expense-form" id="dailySpendingForm">
-          <div class="expense-field">
-            <label for="dailySpendingTitle">รายละเอียดค่าใช้จ่าย</label>
-            <input id="dailySpendingTitle" type="text" maxlength="100" placeholder="เว้นว่างเพื่อใช้ชื่อ วันนี้ใช้ไปแล้ว">
-          </div>
-          <div class="expense-field">
-            <label for="dailySpendingAmount">จำนวนเงิน</label>
-            <input id="dailySpendingAmount" type="text" inputmode="decimal" placeholder="ระบุจำนวนเงิน" required>
-          </div>
-          <div class="expense-field">
-            <label for="dailySpendingDate">วันที่ใช้จ่าย</label>
-            <input id="dailySpendingDate" type="date" required>
-          </div>
-          <p class="expense-status" id="dailySpendingStatus" aria-live="polite"></p>
-          <div class="expense-submit">
-            <button class="button button-primary" type="submit">บันทึกเงินใช้จ่าย</button>
-          </div>
-        </form>
-        <div class="daily-spending-summary" aria-live="polite">
-          <span>ยอดใช้จ่ายรายวันในเดือนที่เลือก</span>
-          <strong id="dailySpendingMonthTotal"></strong>
-        </div>
-        <div class="daily-spending-days" id="dailySpendingDays" aria-live="polite"></div>
-      </section>
+      <div class="expense-workspace">
+        <section class="expense-tab-panel" id="incomePanel" role="tabpanel" aria-labelledby="incomeTab">
+          <section class="income-section" aria-labelledby="monthlyIncomeHeading">
+            <h3 id="monthlyIncomeHeading">รายได้</h3>
+            <p class="daily-spending-description">เพิ่มรายได้แต่ละรายการ ระบบรวมยอดแยกตามเดือนและเก็บประวัติไว้</p>
+            <div class="daily-spending-summary" aria-live="polite">
+              <span>รายได้รวมเดือนที่เลือก</span>
+              <strong id="monthlyIncomeTotal"></strong>
+            </div>
+            <form class="expense-form" id="incomeForm">
+              <div class="expense-field">
+                <label for="incomeTitle">รายละเอียดรายได้</label>
+                <input id="incomeTitle" type="text" maxlength="100" placeholder="เช่น เงินเดือน">
+              </div>
+              <div class="expense-field">
+                <label for="incomeAmount">จำนวนเงิน</label>
+                <input id="incomeAmount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="ระบุจำนวนเงิน" required>
+              </div>
+              <div class="expense-field">
+                <span class="expense-date-label">วันที่ได้รับ</span>
+                <div class="date-selects" id="incomeDateGroup">
+                  <select id="incomeDay" aria-label="วันรับรายได้"></select>
+                  <select id="incomeMonth" aria-label="เดือนรับรายได้"></select>
+                  <select id="incomeYear" aria-label="ปีรับรายได้"></select>
+                </div>
+              </div>
+              <p class="expense-status" id="incomeStatus" aria-live="polite"></p>
+              <div class="expense-submit">
+                <button class="button button-primary" type="submit">เพิ่มรายได้</button>
+              </div>
+            </form>
+            <div class="daily-spending-days" id="monthlyIncomeEntries" aria-live="polite"></div>
+          </section>
+        </section>
 
-      <section class="expenses-list" aria-live="polite" aria-label="รายการรายจ่ายรายเดือน">
-        <div class="expenses-list-heading">
-          <h3>รายจ่ายประจำเดือน</h3>
-          <div class="expense-view-date">
-            <select id="expenseViewMonth" aria-label="เดือนที่ต้องการดู"></select>
-            <select id="expenseViewYear" aria-label="ปีที่ต้องการดู"></select>
-            <button class="button expense-current-month" id="currentExpenseMonth" type="button">เดือนนี้</button>
-          </div>
-        </div>
-        <div class="expense-month-summary" aria-live="polite">
-          <div class="expense-month-total total">
-            <span>รายจ่ายทั้งหมด</span>
-            <strong id="expenseMonthTotal"></strong>
-          </div>
-          <div class="expense-month-total paid">
-            <span>จ่ายแล้ว</span>
-            <strong id="expenseMonthPaid"></strong>
-          </div>
-          <div class="expense-month-total remaining">
-            <span>คงเหลือ</span>
-            <strong id="expenseMonthRemaining"></strong>
-          </div>
-        </div>
-        <p class="expense-count expenses-list-count" id="expenseCount"></p>
-        <div class="expense-items" id="expenseItems"></div>
-      </section>
+        <section class="expense-tab-panel" id="dailySpendingPanel" role="tabpanel" aria-labelledby="dailySpendingTab" hidden>
+          <section class="daily-spending" aria-labelledby="dailySpendingHeading">
+            <h3 id="dailySpendingHeading">เงินใช้จ่ายรายวัน</h3>
+            <p class="daily-spending-description">บันทึกค่าใช้จ่ายที่เกิดขึ้นจริงพร้อมวันที่และจำนวนเงิน ยอดส่วนนี้แยกจากรายจ่ายประจำเดือนและสรุปยอดใช้จ่ายรายวันของเดือนที่เลือก</p>
+            <form class="expense-form" id="dailySpendingForm">
+              <div class="expense-field">
+                <label for="dailySpendingTitle">รายละเอียดค่าใช้จ่าย</label>
+                <input id="dailySpendingTitle" type="text" maxlength="100" placeholder="เว้นว่างเพื่อใช้ชื่อ วันนี้ใช้ไปแล้ว">
+              </div>
+              <div class="expense-field">
+                <label for="dailySpendingAmount">จำนวนเงิน</label>
+                <input id="dailySpendingAmount" type="text" inputmode="decimal" placeholder="ระบุจำนวนเงิน" required>
+              </div>
+              <div class="expense-field">
+                <span class="expense-date-label">วันที่ใช้จ่าย</span>
+                <div class="date-selects" id="dailySpendingDateGroup">
+                  <select id="dailySpendingDay" aria-label="วันใช้จ่าย"></select>
+                  <select id="dailySpendingMonth" aria-label="เดือนใช้จ่าย"></select>
+                  <select id="dailySpendingYear" aria-label="ปีใช้จ่าย"></select>
+                </div>
+              </div>
+              <p class="expense-status" id="dailySpendingStatus" aria-live="polite"></p>
+              <div class="expense-submit">
+                <button class="button button-primary" type="submit">บันทึกเงินใช้จ่าย</button>
+              </div>
+            </form>
+            <div class="daily-spending-summary" aria-live="polite">
+              <span>ยอดใช้จ่ายรายวันในเดือนที่เลือก</span>
+              <strong id="dailySpendingMonthTotal"></strong>
+            </div>
+            <div class="daily-spending-days" id="dailySpendingDays" aria-live="polite"></div>
+          </section>
+        </section>
+
+        <section class="expense-tab-panel" id="monthlyExpensesPanel" role="tabpanel" aria-labelledby="monthlyExpensesTab" hidden>
+          <h3 class="expense-panel-heading">รายจ่ายประจำเดือน</h3>
+          <form class="expense-form" id="expenseForm">
+            <div class="expense-field">
+              <label for="expenseTitle">รายการ</label>
+              <input id="expenseTitle" name="expenseTitle" type="text" maxlength="100" placeholder="เช่น ค่าเดินทาง" required>
+            </div>
+            <div class="expense-field">
+              <label for="expenseAmount">จำนวนเงิน (ไม่บังคับ)</label>
+              <input id="expenseAmount" name="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="เว้นว่างเพื่อบันทึกเป็นรายการ">
+            </div>
+            <div class="expense-field">
+              <span class="expense-date-label">วันที่</span>
+              <div class="date-selects">
+                <select id="expenseDay" aria-label="วัน"></select>
+                <select id="expenseMonth" aria-label="เดือน"></select>
+                <select id="expenseYear" aria-label="ปี"></select>
+              </div>
+            </div>
+            <div class="expense-field">
+              <span class="expense-date-label">เกิดซ้ำ</span>
+              <div class="recurrence-options">
+                <label class="recurrence-option"><input id="expenseMonthly" type="checkbox"> รายเดือน</label>
+                <label class="recurrence-option"><input id="expenseYearly" type="checkbox"> รายปี</label>
+              </div>
+            </div>
+            <p class="expense-status" id="expenseStatus" aria-live="polite"></p>
+            <div class="expense-submit">
+              <button class="button button-primary" type="submit">บันทึกรายจ่าย</button>
+            </div>
+          </form>
+
+          <section class="expenses-list" aria-live="polite" aria-label="รายการรายจ่ายรายเดือน">
+            <div class="expense-month-summary" aria-live="polite">
+              <div class="expense-month-total total">
+                <span>รายจ่ายทั้งหมด</span>
+                <strong id="expenseMonthTotal"></strong>
+              </div>
+              <div class="expense-month-total paid">
+                <span>จ่ายแล้ว</span>
+                <strong id="expenseMonthPaid"></strong>
+              </div>
+              <div class="expense-month-total remaining">
+                <span>คงเหลือ</span>
+                <strong id="expenseMonthRemaining"></strong>
+              </div>
+            </div>
+            <p class="expense-count expenses-list-count" id="expenseCount"></p>
+            <div class="expense-items" id="expenseItems"></div>
+          </section>
+        </section>
+      </div>
     </main>
   </div>
   <div class="account-bar" id="accountBar" hidden>
@@ -798,7 +867,16 @@
     const expenseYear = document.getElementById("expenseYear");
     const expenseViewMonth = document.getElementById("expenseViewMonth");
     const expenseViewYear = document.getElementById("expenseViewYear");
-    const dailySpendingDate = document.getElementById("dailySpendingDate");
+    const incomeDateControls = {
+      day: document.getElementById("incomeDay"),
+      month: document.getElementById("incomeMonth"),
+      year: document.getElementById("incomeYear")
+    };
+    const dailySpendingDateControls = {
+      day: document.getElementById("dailySpendingDay"),
+      month: document.getElementById("dailySpendingMonth"),
+      year: document.getElementById("dailySpendingYear")
+    };
     const expenseMonthly = document.getElementById("expenseMonthly");
     const expenseYearly = document.getElementById("expenseYearly");
     const compactMonthNames = window.matchMedia("(max-width: 480px)");
@@ -811,7 +889,7 @@
     });
 
     function updateExpenseMonthLabels() {
-      [expenseMonth, expenseViewMonth].forEach((monthSelect) => {
+      [expenseMonth, expenseViewMonth, incomeDateControls.month, dailySpendingDateControls.month].forEach((monthSelect) => {
         Array.from(monthSelect.options).forEach((option, index) => {
           const monthNames = expenseMonthNames[index];
           option.textContent = compactMonthNames.matches ? monthNames.short : monthNames.full;
@@ -838,40 +916,55 @@
       updateExpenseMonthLabels();
     }
 
-    function populateExpenseDate(date) {
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-      expenseMonth.replaceChildren();
+    function populateDateControls(dateControls, date) {
+      dateControls.month.replaceChildren();
       for (let monthNumber = 1; monthNumber <= 12; monthNumber += 1) {
         const option = document.createElement("option");
         option.value = String(monthNumber);
-        expenseMonth.append(option);
+        dateControls.month.append(option);
       }
-      updateExpenseMonthLabels();
-      expenseYear.replaceChildren();
+      dateControls.year.replaceChildren();
       for (let expenseYearOption = 1970; expenseYearOption <= today.getFullYear() + 50; expenseYearOption += 1) {
         const option = document.createElement("option");
         option.value = String(expenseYearOption);
         option.textContent = `พ.ศ. ${expenseYearOption + 543}`;
-        expenseYear.append(option);
+        dateControls.year.append(option);
       }
-      expenseMonth.value = String(month);
-      expenseYear.value = String(year);
-      populateExpenseDays(date.getDate());
+      dateControls.month.value = String(date.getMonth() + 1);
+      dateControls.year.value = String(date.getFullYear());
+      populateDateDays(dateControls, date.getDate());
+      updateExpenseMonthLabels();
     }
 
-    function populateExpenseDays(preferredDay) {
-      const daysInMonth = new Date(Number(expenseYear.value), Number(expenseMonth.value), 0).getDate();
+    function populateExpenseDate(date) {
+      populateDateControls({ day: expenseDay, month: expenseMonth, year: expenseYear }, date);
+      selectedExpenseDate = readDateControls({ day: expenseDay, month: expenseMonth, year: expenseYear });
+    }
+
+    function populateDateDays(dateControls, preferredDay) {
+      const daysInMonth = new Date(Number(dateControls.year.value), Number(dateControls.month.value), 0).getDate();
       const dayToSelect = Math.min(preferredDay, daysInMonth);
-      expenseDay.replaceChildren();
+      dateControls.day.replaceChildren();
       for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber += 1) {
         const option = document.createElement("option");
         option.value = String(dayNumber);
         option.textContent = new Intl.NumberFormat("th-TH", { useGrouping: false }).format(dayNumber);
-        expenseDay.append(option);
+        dateControls.day.append(option);
       }
-      expenseDay.value = String(dayToSelect);
-      selectedExpenseDate = new Date(Number(expenseYear.value), Number(expenseMonth.value) - 1, dayToSelect);
+      dateControls.day.value = String(dayToSelect);
+      return new Date(Number(dateControls.year.value), Number(dateControls.month.value) - 1, dayToSelect);
+    }
+
+    function readDateControls(dateControls) {
+      return new Date(
+        Number(dateControls.year.value),
+        Number(dateControls.month.value) - 1,
+        Number(dateControls.day.value)
+      );
+    }
+
+    function selectedDateKey(dateControls) {
+      return dateKey(readDateControls(dateControls));
     }
 
     function selectedExpenseKey() {
@@ -1061,7 +1154,9 @@
     }
 
     function renderMonthlyIncome() {
-      const period = monthPeriodKey(new Date());
+      const period = monthPeriodKey(selectedExpenseViewMonth);
+      document.getElementById("monthlyIncomeHeading").textContent =
+        `รายได้ · ${new Intl.DateTimeFormat("th-TH", { month: "long", year: "numeric" }).format(selectedExpenseViewMonth)}`;
       const entries = incomeEntries
         .filter((item) => monthPeriodKey(dateFromKey(item.date)) === period)
         .sort((first, second) =>
@@ -1077,7 +1172,7 @@
       if (entries.length === 0) {
         const empty = document.createElement("div");
         empty.className = "daily-spending-empty";
-        empty.textContent = "ยังไม่มีรายได้ในเดือนนี้";
+        empty.textContent = "ยังไม่มีรายได้ในเดือนที่เลือก";
         entriesContainer.append(empty);
         return;
       }
@@ -1786,12 +1881,53 @@
         currencyFormatter.format(monthRemainingCents / 100);
       document.getElementById("dashboardMonthIncomeTotal").textContent =
         currencyFormatter.format(incomeMonthCents / 100);
+      const dailyAverageAmount = Math.round(monthRemainingCents / daysRemaining) / 100;
       document.getElementById("dashboardDailyAverageRemaining").textContent =
-        currencyFormatter.format(Math.round(monthRemainingCents / daysRemaining) / 100);
+        currencyFormatter.format(dailyAverageAmount);
+      document.getElementById("dashboardDailyAverageRemaining").style.setProperty(
+        "--daily-average-color",
+        dailyAverageColor(dailyAverageAmount)
+      );
       document.getElementById("dashboardExpenseCount").textContent =
         `${new Intl.NumberFormat("th-TH").format(itemCount)} รายการ · จ่ายแล้ว ${new Intl.NumberFormat("th-TH").format(paidCount)} รายการ`;
 
     }
+
+    function dailyAverageColor(amount) {
+      const progress = Math.max(0, Math.min(amount / 225, 1));
+      const red = [255, 48, 48];
+      const green = [57, 255, 20];
+      const channels = red.map((channel, index) =>
+        Math.round(channel + (green[index] - channel) * progress));
+      return `rgb(${channels.join(", ")})`;
+    }
+
+    function setExpenseTab(tabId) {
+      const tabs = [...document.querySelectorAll(".expense-tab")];
+      tabs.forEach((tab) => {
+        const selected = tab.id === tabId;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        document.getElementById(tab.getAttribute("aria-controls")).hidden = !selected;
+      });
+    }
+
+    const expenseTabs = [...document.querySelectorAll(".expense-tab")];
+    expenseTabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => setExpenseTab(tab.id));
+      tab.addEventListener("keydown", (event) => {
+        const direction = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+        const targetIndex = event.key === "Home" ? 0
+          : event.key === "End" ? expenseTabs.length - 1
+            : direction ? (index + direction + expenseTabs.length) % expenseTabs.length
+              : -1;
+        if (targetIndex < 0) return;
+        event.preventDefault();
+        const targetTab = expenseTabs[targetIndex];
+        setExpenseTab(targetTab.id);
+        targetTab.focus();
+      });
+    });
 
     function setActivePage() {
       const showExpenses = window.location.hash === "#expenses";
@@ -1814,8 +1950,8 @@
     }
 
     populateExpenseDate(selectedExpenseDate);
-    dailySpendingDate.value = toDatabaseDate(dateKey(today));
-    document.getElementById("incomeDate").value = toDatabaseDate(dateKey(new Date()));
+    populateDateControls(incomeDateControls, today);
+    populateDateControls(dailySpendingDateControls, today);
     populateExpenseViewDate();
     compactMonthNames.addEventListener("change", updateExpenseMonthLabels);
     window.addEventListener("resize", updateExpenseMonthLabels);
@@ -1847,18 +1983,10 @@
       event.preventDefault();
       const titleInput = document.getElementById("incomeTitle");
       const amountInput = document.getElementById("incomeAmount");
-      const dateInput = document.getElementById("incomeDate");
       const status = document.getElementById("incomeStatus");
       status.textContent = "";
-      const dateValue = dateInput.value;
+      const dateValue = toDatabaseDate(selectedDateKey(incomeDateControls));
       const amount = amountInput.value.trim();
-
-      if (!dateValue || !/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-        dateInput.setCustomValidity("กรุณาเลือกวันที่ได้รับรายได้");
-        dateInput.reportValidity();
-        return;
-      }
-      dateInput.setCustomValidity("");
       if (!Number.isFinite(Number(amount)) || Number(amount) <= 0) {
         amountInput.setCustomValidity("กรุณาระบุจำนวนเงินที่มากกว่า 0");
         amountInput.reportValidity();
@@ -1878,26 +2006,39 @@
         status.textContent = "บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง";
         return;
       }
+      selectExpenseViewMonth(dateFromKey(fromDatabaseDate(dateValue)));
       titleInput.value = "";
       amountInput.value = "";
-      renderMonthlyIncome();
       renderDashboard();
       status.textContent = "เพิ่มรายได้แล้ว";
     });
     document.getElementById("incomeAmount").addEventListener("input", (event) => event.currentTarget.setCustomValidity(""));
-    document.getElementById("incomeDate").addEventListener("change", (event) => event.currentTarget.setCustomValidity(""));
+
+    function onDateControlsMonthYearChange(dateControls, statusId) {
+      populateDateDays(dateControls, Number(dateControls.day.value));
+      if (statusId) document.getElementById(statusId).textContent = "";
+    }
 
     function onExpenseDateChange() {
-      populateExpenseDays(Number(expenseDay.value));
+      selectedExpenseDate = populateDateDays(
+        { day: expenseDay, month: expenseMonth, year: expenseYear },
+        Number(expenseDay.value)
+      );
       document.getElementById("expenseStatus").textContent = "";
       renderExpenses();
     }
     expenseDay.addEventListener("change", () => {
-      selectedExpenseDate = new Date(Number(expenseYear.value), Number(expenseMonth.value) - 1, Number(expenseDay.value));
+      selectedExpenseDate = readDateControls({ day: expenseDay, month: expenseMonth, year: expenseYear });
       renderExpenses();
     });
     expenseMonth.addEventListener("change", onExpenseDateChange);
     expenseYear.addEventListener("change", onExpenseDateChange);
+    [incomeDateControls, dailySpendingDateControls].forEach((dateControls) => {
+      dateControls.month.addEventListener("change", () =>
+        onDateControlsMonthYearChange(dateControls, dateControls === incomeDateControls ? "incomeStatus" : "dailySpendingStatus"));
+      dateControls.year.addEventListener("change", () =>
+        onDateControlsMonthYearChange(dateControls, dateControls === incomeDateControls ? "incomeStatus" : "dailySpendingStatus"));
+    });
     document.getElementById("dailySpendingForm").addEventListener("submit", (event) => {
       event.preventDefault();
       const titleInput = document.getElementById("dailySpendingTitle");
@@ -1909,18 +2050,7 @@
       status.textContent = "";
 
       titleInput.setCustomValidity("");
-      const selectedSpendingDate = dailySpendingDate.value;
-      if (!selectedSpendingDate) {
-        dailySpendingDate.setCustomValidity("กรุณาเลือกวันที่ใช้จ่าย");
-        dailySpendingDate.reportValidity();
-        return;
-      }
-      dailySpendingDate.setCustomValidity("");
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(selectedSpendingDate)) {
-        dailySpendingDate.setCustomValidity("กรุณาเลือกวันที่ใช้จ่ายที่ถูกต้อง");
-        dailySpendingDate.reportValidity();
-        return;
-      }
+      const selectedSpendingDate = toDatabaseDate(selectedDateKey(dailySpendingDateControls));
       if (totalAmount === null) {
         amountInput.setCustomValidity("กรุณาระบุจำนวนเงิน หรือบวกจำนวนเงินด้วยเครื่องหมาย + (ทศนิยมไม่เกิน 2 ตำแหน่ง)");
         amountInput.reportValidity();
@@ -1942,33 +2072,32 @@
         return;
       }
 
-      const selectedDate = dateFromKey(spendingDate);
-      selectedExpenseViewMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-      expenseViewMonth.value = String(selectedExpenseViewMonth.getMonth() + 1);
-      expenseViewYear.value = String(selectedExpenseViewMonth.getFullYear());
+      selectExpenseViewMonth(dateFromKey(spendingDate));
       titleInput.value = "";
       amountInput.value = "";
-      renderExpenses();
-      renderDailySpending();
       renderDashboard();
       status.textContent = "บันทึกเงินใช้จ่ายแล้ว";
     });
     document.getElementById("dailySpendingTitle").addEventListener("input", (event) => event.currentTarget.setCustomValidity(""));
     document.getElementById("dailySpendingAmount").addEventListener("input", (event) => event.currentTarget.setCustomValidity(""));
-    dailySpendingDate.addEventListener("change", () => dailySpendingDate.setCustomValidity(""));
-    function onExpenseViewDateChange() {
-      selectedExpenseViewMonth = new Date(Number(expenseViewYear.value), Number(expenseViewMonth.value) - 1, 1);
-      renderExpenses();
-      renderDailySpending();
-    }
-    expenseViewMonth.addEventListener("change", onExpenseViewDateChange);
-    expenseViewYear.addEventListener("change", onExpenseViewDateChange);
-    document.getElementById("currentExpenseMonth").addEventListener("click", () => {
-      selectedExpenseViewMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    function selectExpenseViewMonth(date) {
+      selectedExpenseViewMonth = new Date(date.getFullYear(), date.getMonth(), 1);
       expenseViewMonth.value = String(selectedExpenseViewMonth.getMonth() + 1);
       expenseViewYear.value = String(selectedExpenseViewMonth.getFullYear());
       renderExpenses();
       renderDailySpending();
+      renderMonthlyIncome();
+    }
+    function onExpenseViewDateChange() {
+      selectedExpenseViewMonth = new Date(Number(expenseViewYear.value), Number(expenseViewMonth.value) - 1, 1);
+      renderExpenses();
+      renderDailySpending();
+      renderMonthlyIncome();
+    }
+    expenseViewMonth.addEventListener("change", onExpenseViewDateChange);
+    expenseViewYear.addEventListener("change", onExpenseViewDateChange);
+    document.getElementById("currentExpenseMonth").addEventListener("click", () => {
+      selectExpenseViewMonth(today);
     });
     expenseMonthly.addEventListener("change", () => {
       if (expenseMonthly.checked) expenseYearly.checked = false;
