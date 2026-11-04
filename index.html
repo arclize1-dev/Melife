@@ -210,16 +210,23 @@
     .expense-summary-row > span { color: #c9cbd9; line-height: 1.45; }
     .expense-summary-row strong { color: #c4baff; font-size: 18px; white-space: nowrap; }
     .expense-summary-row.total > span, .expense-summary-row.total strong { color: #ff9aab; }
-    .expense-summary-row.paid > span, .expense-summary-row.paid strong { color: #8dd8bd; }
+    .expense-summary-row.paid > span, .expense-summary-row.paid strong { color: #f0f1f5; }
     .expense-summary-row.today-spent {
       min-height: 100px;
       background: linear-gradient(135deg, #20354a, #1a2535);
       border-color: #36506b;
     }
     .expense-summary-row.today-spent > span, .expense-summary-row.today-spent strong { color: #9dc9ff; }
-    .expense-summary-row.today-spent > span { font-size: 13px; }
+    /*.expense-summary-row.today-spent > span { font-size: 13px; }*/
     .expense-summary-row.today-spent strong { font-size: 24px; }
-    .expense-summary-row.month-spent > span, .expense-summary-row.month-spent strong { color: #8dd8bd; }
+    .daily-budget-comparison { display: grid; gap: 12px; margin-top: auto; }
+    .expense-summary-row.today-spent .daily-budget-comparison > span { color: #9dc9ff; font-size: 12px; }
+    .expense-summary-row.today-spent .daily-budget-comparison > strong {
+      color: var(--daily-budget-color, #d3d5e4);
+      font-size: 24px;
+      transition: color .25s ease;
+    }
+    .expense-summary-row.month-spent > span, .expense-summary-row.month-spent strong { color: #ff5b6e; }
     .expense-summary-row.remaining > span, .expense-summary-row.remaining strong { color: #f1b878; }
     .expense-summary-row.remaining strong { font-size: 19px; }
     .expense-summary-row.month-income-remaining {
@@ -228,9 +235,12 @@
       border-color: #514777;
     }
     .expense-summary-row.month-income-remaining > span:nth-of-type(2) { margin-top: auto; }
-    .expense-summary-row.month-income-remaining > span, .expense-summary-row.month-income-remaining strong { color: #c4baff; }
-    .expense-summary-row.month-income-remaining strong { font-size: 20px; }
-    .expense-summary-row.month-income-total > span, .expense-summary-row.month-income-total strong { color: #8dd8bd; }
+    .expense-summary-row.month-income-remaining > span:first-of-type,
+    .expense-summary-row.month-income-remaining > strong:nth-of-type(1) { color: #c4baff; }
+    .expense-summary-row.month-income-remaining > span:nth-of-type(2) { color: #f1c27d; }
+    .expense-summary-row.month-income-remaining strong { font-size: 24px; }
+    .expense-summary-row.month-income-total > span:first-child,
+    .expense-summary-row.month-income-total > strong { color: #8dd8bd; }
     .expense-summary-row.month-income-total {
       display: block;
       grid-column: 1 / -1;
@@ -239,7 +249,7 @@
       border-color: #376452;
     }
     .month-income-total > span { display: block; font-size: 13px; }
-    .month-income-total > strong { display: block; margin-top: 6px; font-size: 30px; }
+    .month-income-total > strong { display: block; margin-top: 6px; font-size: 24px; }
     .income-expense-breakdown { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
     .income-expense-breakdown .expense-summary-row {
       min-height: 72px;
@@ -250,6 +260,10 @@
     }
     .income-expense-breakdown .expense-summary-row > span { font-size: 11px; }
     .income-expense-breakdown .expense-summary-row strong { font-size: 16px; }
+    .income-expense-breakdown .total > span, .income-expense-breakdown .total strong { color: #ff9aab; }
+    .income-expense-breakdown .paid > span, .income-expense-breakdown .paid strong { color: #f0f1f5; }
+    .income-expense-breakdown .month-spent > span, .income-expense-breakdown .month-spent strong { color: #ff5b6e; }
+    .income-expense-breakdown .remaining > span, .income-expense-breakdown .remaining strong { color: #f1b878; }
     .income-expense-breakdown .expense-summary-count { padding: 0 4px; }
     #dashboardDailyAverageRemaining { color: var(--daily-average-color, #ff3030); transition: color .25s ease; }
     .expense-summary-count { grid-column: 1 / -1; margin: 2px 0 0; color: var(--muted); font-size: 12px; }
@@ -258,7 +272,9 @@
       .expense-summary-row { min-height: 76px; padding: 12px; }
       .expense-summary-row.today-spent, .expense-summary-row.month-income-remaining { min-height: 92px; }
       .expense-summary-row.today-spent strong { font-size: 20px; }
-      .expense-summary-row.month-income-remaining strong { font-size: 17px; }
+      .expense-summary-row.month-income-remaining strong { font-size: 20px; }
+      .expense-summary-row.today-spent .daily-budget-comparison > strong { font-size: 20px; }
+      .month-income-total > strong { font-size: 20px; }
     }
     .dashboard-action { display: inline-flex; margin-top: 16px; color: #bcb2ff; font-size: 13px; text-decoration: none; }
     .dashboard-action:hover { color: #e8e4ff; text-decoration: underline; }
@@ -565,6 +581,10 @@
               <div class="expense-summary-row today-spent">
                 <span>วันนี้ใช้ไปแล้ว</span>
                 <strong id="dashboardTodaySpent"></strong>
+                <div class="daily-budget-comparison">
+                  <span>เทียบงบรายวัน</span>
+                  <strong id="dashboardDailyBudgetDifference"></strong>
+                </div>
               </div>
               <div class="expense-summary-row month-income-remaining">
                 <span>เงินคงเหลือเดือนนี้</span>
@@ -1869,9 +1889,18 @@
       const currencyFormatter = new Intl.NumberFormat("th-TH", {
         style: "currency", currency: "THB", maximumFractionDigits: 2
       });
+      const dailyAverageCents = Math.round(monthRemainingCents / daysRemaining);
+      const dailyBudgetDifferenceCents = dailyAverageCents - dailySpentTodayCents;
       document.getElementById("dashboardExpenseMonth").textContent =
         new Intl.DateTimeFormat("th-TH", { month: "long", year: "numeric" }).format(today);
       document.getElementById("dashboardTodaySpent").textContent = currencyFormatter.format(dailySpentTodayCents / 100);
+      const dailyBudgetDifference = document.getElementById("dashboardDailyBudgetDifference");
+      dailyBudgetDifference.textContent =
+        `${dailyBudgetDifferenceCents > 0 ? "+" : dailyBudgetDifferenceCents < 0 ? "-" : ""}${currencyFormatter.format(Math.abs(dailyBudgetDifferenceCents) / 100)}`;
+      dailyBudgetDifference.parentElement.style.setProperty(
+        "--daily-budget-color",
+        dailyBudgetDifferenceCents > 0 ? "#39ff14" : dailyBudgetDifferenceCents < 0 ? "#ff3030" : "#d3d5e4"
+      );
       document.getElementById("dashboardExpenseTotal").textContent = currencyFormatter.format(totalCents / 100);
       document.getElementById("dashboardExpensePaid").textContent = currencyFormatter.format(paidCents / 100);
       document.getElementById("dashboardMonthSpent").textContent = currencyFormatter.format(monthSpentCents / 100);
@@ -1881,7 +1910,7 @@
         currencyFormatter.format(monthRemainingCents / 100);
       document.getElementById("dashboardMonthIncomeTotal").textContent =
         currencyFormatter.format(incomeMonthCents / 100);
-      const dailyAverageAmount = Math.round(monthRemainingCents / daysRemaining) / 100;
+      const dailyAverageAmount = dailyAverageCents / 100;
       document.getElementById("dashboardDailyAverageRemaining").textContent =
         currencyFormatter.format(dailyAverageAmount);
       document.getElementById("dashboardDailyAverageRemaining").style.setProperty(
