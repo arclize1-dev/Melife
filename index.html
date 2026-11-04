@@ -207,6 +207,11 @@
       border-radius: 14px;
       font-size: 12px;
     }
+    .expense-summary-row[data-detail] { cursor: pointer; text-align: left; font: inherit; }
+    .expense-summary-row[data-detail]:focus-visible, .income-total-trigger:focus-visible {
+      outline: 3px solid #a69aff;
+      outline-offset: 2px;
+    }
     .expense-summary-row > span { color: #c9cbd9; line-height: 1.45; }
     .expense-summary-row strong { color: #c4baff; font-size: 18px; white-space: nowrap; }
     .expense-summary-row.total > span, .expense-summary-row.total strong { color: #ff9aab; }
@@ -239,8 +244,8 @@
     .expense-summary-row.month-income-remaining > strong:nth-of-type(1) { color: #c4baff; }
     .expense-summary-row.month-income-remaining > span:nth-of-type(2) { color: #f1c27d; }
     .expense-summary-row.month-income-remaining strong { font-size: 24px; }
-    .expense-summary-row.month-income-total > span:first-child,
-    .expense-summary-row.month-income-total > strong { color: #8dd8bd; }
+    .expense-summary-row.month-income-total > .income-total-trigger > span,
+    .expense-summary-row.month-income-total > .income-total-trigger > strong { color: #8dd8bd; }
     .expense-summary-row.month-income-total {
       display: block;
       grid-column: 1 / -1;
@@ -248,8 +253,8 @@
       background: linear-gradient(145deg, #203b35, #192b29);
       border-color: #376452;
     }
-    .month-income-total > span { display: block; font-size: 13px; }
-    .month-income-total > strong { display: block; margin-top: 6px; font-size: 24px; }
+    .income-total-trigger > span { display: block; font-size: 13px; }
+    .income-total-trigger > strong { display: block; margin-top: 6px; font-size: 24px; }
     .income-expense-breakdown { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
     .income-expense-breakdown .expense-summary-row {
       min-height: 72px;
@@ -265,6 +270,37 @@
     .income-expense-breakdown .month-spent > span, .income-expense-breakdown .month-spent strong { color: #ff5b6e; }
     .income-expense-breakdown .remaining > span, .income-expense-breakdown .remaining strong { color: #f1b878; }
     .income-expense-breakdown .expense-summary-count { padding: 0 4px; }
+    .income-total-trigger {
+      display: block;
+      width: 100%;
+      padding: 0;
+      color: inherit;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+    }
+    .summary-detail-dialog {
+      width: min(560px, calc(100% - 32px));
+      max-height: min(80vh, 720px);
+      padding: 20px;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid #393c50;
+      border-radius: 16px;
+      box-shadow: 0 24px 80px rgb(0 0 0 / 55%);
+    }
+    .summary-detail-dialog::backdrop { background: rgb(5 6 12 / 72%); backdrop-filter: blur(3px); }
+    .summary-detail-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .summary-detail-heading h4 { margin: 0; font-size: 15px; }
+    .summary-detail-total { color: #c4baff; font-weight: 700; white-space: nowrap; }
+    .summary-detail-list { display: grid; gap: 8px; max-height: 58vh; overflow-y: auto; }
+    .summary-detail-item { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 0; border-top: 1px solid #303346; }
+    .summary-detail-item-title { min-width: 0; }
+    .summary-detail-item-meta { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .summary-detail-item-amount { flex: 0 0 auto; color: #eff0fa; font-weight: 600; white-space: nowrap; }
+    .summary-detail-empty { margin: 0; color: var(--muted); font-size: 13px; }
+    .summary-detail-close { min-height: 32px; padding: 0 10px; }
     #dashboardDailyAverageRemaining { color: var(--daily-average-color, #ff3030); transition: color .25s ease; }
     .expense-summary-count { grid-column: 1 / -1; margin: 2px 0 0; color: var(--muted); font-size: 12px; }
     @media (max-width: 480px) {
@@ -274,7 +310,7 @@
       .expense-summary-row.today-spent strong { font-size: 20px; }
       .expense-summary-row.month-income-remaining strong { font-size: 20px; }
       .expense-summary-row.today-spent .daily-budget-comparison > strong { font-size: 20px; }
-      .month-income-total > strong { font-size: 20px; }
+      .income-total-trigger > strong { font-size: 20px; }
     }
     .dashboard-action { display: inline-flex; margin-top: 16px; color: #bcb2ff; font-size: 13px; text-decoration: none; }
     .dashboard-action:hover { color: #e8e4ff; text-decoration: underline; }
@@ -578,7 +614,7 @@
             <h3 id="monthlyExpensesHeading">สรุปรายจ่าย</h3>
             <p class="dashboard-card-subtitle" id="dashboardExpenseMonth"></p>
             <div class="expense-summary">
-              <div class="expense-summary-row today-spent">
+              <div class="expense-summary-row today-spent" data-detail="today" role="button" tabindex="0" aria-expanded="false">
                 <span>วันนี้ใช้ไปแล้ว</span>
                 <strong id="dashboardTodaySpent"></strong>
                 <div class="daily-budget-comparison">
@@ -586,29 +622,31 @@
                   <strong id="dashboardDailyBudgetDifference"></strong>
                 </div>
               </div>
-              <div class="expense-summary-row month-income-remaining">
+              <div class="expense-summary-row month-income-remaining" data-detail="balance" role="button" tabindex="0" aria-expanded="false">
                 <span>เงินคงเหลือเดือนนี้</span>
                 <strong id="dashboardMonthIncomeRemaining"></strong>
                 <span>คงเหลือเฉลี่ยรายวัน</span>
                 <strong id="dashboardDailyAverageRemaining"></strong>
               </div>
               <div class="expense-summary-row month-income-total">
-                <span>รายได้เดือนนี้</span>
-                <strong id="dashboardMonthIncomeTotal"></strong>
+                <button class="income-total-trigger" type="button" data-detail="income">
+                  <span>รายได้เดือนนี้</span>
+                  <strong id="dashboardMonthIncomeTotal"></strong>
+                </button>
                 <div class="income-expense-breakdown">
-                  <div class="expense-summary-row total">
+                  <div class="expense-summary-row total" data-detail="total-expenses" role="button" tabindex="0" aria-expanded="false">
                     <span>รายจ่ายทั้งหมด</span>
                     <strong id="dashboardExpenseTotal"></strong>
                   </div>
-                  <div class="expense-summary-row paid">
+                  <div class="expense-summary-row paid" data-detail="paid-expenses" role="button" tabindex="0" aria-expanded="false">
                     <span>รายจ่ายรายเดือนที่จ่ายแล้ว</span>
                     <strong id="dashboardExpensePaid"></strong>
                   </div>
-                  <div class="expense-summary-row month-spent">
+                  <div class="expense-summary-row month-spent" data-detail="month-spent" role="button" tabindex="0" aria-expanded="false">
                     <span>เดือนนี้ใช้ไปแล้ว</span>
                     <strong id="dashboardMonthSpent"></strong>
                   </div>
-                  <div class="expense-summary-row remaining">
+                  <div class="expense-summary-row remaining" data-detail="remaining-expenses" role="button" tabindex="0" aria-expanded="false">
                     <span>ค่าใช้จ่ายรายเดือนที่เหลือ</span>
                     <strong id="dashboardExpenseRemaining"></strong>
                   </div>
@@ -616,6 +654,13 @@
                 </div>
               </div>
             </div>
+            <dialog class="summary-detail-dialog" id="summaryDetailPanel" aria-labelledby="summaryDetailTitle">
+              <div class="summary-detail-heading">
+                <h4 id="summaryDetailTitle"></h4>
+                <button class="button summary-detail-close" id="closeSummaryDetail" type="button">ปิด</button>
+              </div>
+              <div class="summary-detail-list" id="summaryDetailList" aria-live="polite"></div>
+            </dialog>
             <a class="dashboard-action" href="#expenses">ดูรายการรายจ่าย →</a>
           </section>
         </section>
@@ -1919,7 +1964,161 @@
       );
       document.getElementById("dashboardExpenseCount").textContent =
         `${new Intl.NumberFormat("th-TH").format(itemCount)} รายการ · จ่ายแล้ว ${new Intl.NumberFormat("th-TH").format(paidCount)} รายการ`;
+      if (openSummaryDetailId) renderSummaryDetail(openSummaryDetailId);
+    }
 
+    let openSummaryDetailId = null;
+    function renderSummaryDetail(detailId) {
+      const monthExpenses = [];
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+      const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+      for (let day = 1; day <= daysInMonth; day += 1) {
+        monthExpenses.push(...getExpensesForDate(new Date(monthStart.getFullYear(), monthStart.getMonth(), day)));
+      }
+
+      const isPaid = (item) => (item.paidDates || []).includes(item.occurrenceDate);
+      const monthDailySpending = dailySpending
+        .filter((item) => monthPeriodKey(dateFromKey(item.date)) === monthPeriodKey(today))
+        .map((item) => ({ title: item.title, date: item.date, amount: Number(item.amount), meta: "เงินใช้จ่ายรายวัน" }));
+      const todaySpending = dailySpending
+        .filter((item) => toDatabaseDate(item.date) === toDatabaseDate(dateKey(today)))
+        .map((item) => ({ title: item.title, date: item.date, amount: Number(item.amount) }));
+      const monthIncome = incomeEntries
+        .filter((item) => monthPeriodKey(dateFromKey(item.date)) === monthPeriodKey(today))
+        .map((item) => ({ title: item.title, date: item.date, amount: Number(item.amount), meta: "รายได้" }));
+      const expenseDetails = (items) => items.map((item) => ({
+        title: item.title,
+        date: item.occurrenceDate,
+        amount: item.amount === "" || item.amount === undefined ? null : Number(item.amount),
+        meta: `${item.recurrence === "monthly" ? "รายเดือน" : item.recurrence === "yearly" ? "รายปี" : "ครั้งเดียว"} · ${isPaid(item) ? "จ่ายแล้ว" : "ยังไม่จ่าย"}`
+      }));
+      const paidExpenses = monthExpenses.filter(isPaid);
+      const unpaidExpenses = monthExpenses.filter((item) => !isPaid(item));
+      const currencyFormatter = new Intl.NumberFormat("th-TH", {
+        style: "currency", currency: "THB", maximumFractionDigits: 2
+      });
+      const dailySpentTodayCents = todaySpending.reduce((sum, item) => sum + Math.round(item.amount * 100), 0);
+      const dailySpentMonthCents = monthDailySpending.reduce((sum, item) => sum + Math.round(item.amount * 100), 0);
+      const paidExpenseCents = paidExpenses.reduce((sum, item) =>
+        sum + (Number.isFinite(Number(item.amount)) ? Math.round(Number(item.amount) * 100) : 0), 0);
+      const totalExpenseCents = monthExpenses.reduce((sum, item) =>
+        sum + (Number.isFinite(Number(item.amount)) ? Math.round(Number(item.amount) * 100) : 0), 0);
+      const incomeCents = monthIncome.reduce((sum, item) => sum + Math.round(item.amount * 100), 0);
+      const daysRemaining = daysInMonth - today.getDate() + 1;
+      const dailyAverageCents = Math.round((incomeCents - dailySpentMonthCents - paidExpenseCents) / daysRemaining);
+      const dailyBudgetDifferenceCents = dailyAverageCents - dailySpentTodayCents;
+      let title;
+      let items;
+      let totalCents = null;
+      let explanation = "";
+
+      switch (detailId) {
+        case "today":
+          title = "วันนี้ใช้ไปแล้ว";
+          items = todaySpending;
+          totalCents = dailySpentTodayCents;
+          explanation = `เทียบงบรายวัน: ${dailyBudgetDifferenceCents > 0 ? "+" : dailyBudgetDifferenceCents < 0 ? "-" : ""}${currencyFormatter.format(Math.abs(dailyBudgetDifferenceCents) / 100)}`;
+          break;
+        case "balance":
+          title = "เงินคงเหลือเดือนนี้";
+          items = [
+            ...monthIncome,
+            ...monthDailySpending.map((item) => ({ ...item, title: `ใช้จ่าย: ${item.title}`, amount: -item.amount })),
+            ...expenseDetails(paidExpenses).map((item) => ({ ...item, title: `จ่ายแล้ว: ${item.title}`, amount: item.amount === null ? null : -item.amount }))
+          ];
+          totalCents = incomeCents - dailySpentMonthCents - paidExpenseCents;
+          explanation = `คงเหลือเฉลี่ยรายวัน: ${currencyFormatter.format(dailyAverageCents / 100)} · คำนวณจากยอดคงเหลือหาร ${daysRemaining} วันที่เหลือ`;
+          break;
+        case "income":
+          title = "รายได้เดือนนี้";
+          items = monthIncome;
+          totalCents = incomeCents;
+          break;
+        case "total-expenses":
+          title = "รายจ่ายทั้งหมด";
+          items = expenseDetails(monthExpenses);
+          totalCents = totalExpenseCents;
+          break;
+        case "paid-expenses":
+          title = "รายจ่ายรายเดือนที่จ่ายแล้ว";
+          items = expenseDetails(paidExpenses);
+          totalCents = paidExpenseCents;
+          break;
+        case "month-spent":
+          title = "เดือนนี้ใช้ไปแล้ว";
+          items = [...monthDailySpending, ...expenseDetails(paidExpenses)];
+          totalCents = dailySpentMonthCents + paidExpenseCents;
+          break;
+        case "remaining-expenses":
+          title = "ค่าใช้จ่ายรายเดือนที่เหลือ";
+          items = expenseDetails(unpaidExpenses);
+          totalCents = totalExpenseCents - paidExpenseCents;
+          break;
+        default:
+          return;
+      }
+
+      const panel = document.getElementById("summaryDetailPanel");
+      document.getElementById("summaryDetailTitle").textContent = title;
+      const list = document.getElementById("summaryDetailList");
+      list.replaceChildren();
+      if (totalCents !== null) {
+        const total = document.createElement("strong");
+        total.className = "summary-detail-total";
+        total.textContent = currencyFormatter.format(totalCents / 100);
+        list.append(total);
+      }
+      if (explanation) {
+        const note = document.createElement("p");
+        note.className = "summary-detail-empty";
+        note.textContent = explanation;
+        list.append(note);
+      }
+      if (items.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "summary-detail-empty";
+        empty.textContent = "ไม่มีรายการในหัวข้อนี้";
+        list.append(empty);
+      } else {
+        items.sort((first, second) => dateFromKey(second.date) - dateFromKey(first.date) ||
+          first.title.localeCompare(second.title, "th"));
+        items.forEach((item) => {
+          const row = document.createElement("article");
+          row.className = "summary-detail-item";
+          const details = document.createElement("span");
+          details.className = "summary-detail-item-title";
+          details.append(document.createTextNode(item.title));
+          const meta = document.createElement("span");
+          meta.className = "summary-detail-item-meta";
+          meta.textContent = `${expenseDateFormatter.format(dateFromKey(item.date))}${item.meta ? ` · ${item.meta}` : ""}`;
+          details.append(meta);
+          const amount = document.createElement("strong");
+          amount.className = "summary-detail-item-amount";
+          amount.textContent = item.amount === null ? "ไม่ระบุจำนวนเงิน" : currencyFormatter.format(item.amount);
+          row.append(details, amount);
+          list.append(row);
+        });
+      }
+      if (!panel.open) panel.showModal();
+      document.querySelectorAll("[data-detail]").forEach((trigger) => {
+        trigger.setAttribute("aria-expanded", String(trigger.dataset.detail === detailId));
+      });
+    }
+
+    function closeSummaryDetail() {
+      const panel = document.getElementById("summaryDetailPanel");
+      openSummaryDetailId = null;
+      document.querySelectorAll("[data-detail]").forEach((trigger) => trigger.setAttribute("aria-expanded", "false"));
+      if (panel.open) panel.close();
+    }
+
+    function toggleSummaryDetail(detailId) {
+      if (openSummaryDetailId === detailId) {
+        closeSummaryDetail();
+        return;
+      }
+      openSummaryDetailId = detailId;
+      renderSummaryDetail(detailId);
     }
 
     function dailyAverageColor(amount) {
@@ -1940,6 +2139,28 @@
         document.getElementById(tab.getAttribute("aria-controls")).hidden = !selected;
       });
     }
+
+    document.querySelectorAll("[data-detail]").forEach((trigger) => {
+      trigger.setAttribute("aria-controls", "summaryDetailPanel");
+      trigger.setAttribute("aria-expanded", "false");
+      trigger.addEventListener("click", () => toggleSummaryDetail(trigger.dataset.detail));
+      trigger.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        if (trigger.tagName === "BUTTON" && event.key === "Enter") return;
+        event.preventDefault();
+        toggleSummaryDetail(trigger.dataset.detail);
+      });
+    });
+    const summaryDetailDialog = document.getElementById("summaryDetailPanel");
+    document.getElementById("closeSummaryDetail").addEventListener("click", closeSummaryDetail);
+    summaryDetailDialog.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      closeSummaryDetail();
+    });
+    summaryDetailDialog.addEventListener("close", () => {
+      openSummaryDetailId = null;
+      document.querySelectorAll("[data-detail]").forEach((trigger) => trigger.setAttribute("aria-expanded", "false"));
+    });
 
     const expenseTabs = [...document.querySelectorAll(".expense-tab")];
     expenseTabs.forEach((tab, index) => {
