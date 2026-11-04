@@ -191,46 +191,6 @@
     }
     .dashboard-card h3 { margin: 0; font-size: 18px; }
     .dashboard-card-subtitle { margin: 4px 0 16px; color: var(--muted); font-size: 12px; }
-    .upcoming-list { display: grid; gap: 10px; }
-    .upcoming-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 12px;
-      color: inherit;
-      background: #1b1e2c;
-      border: 1px solid #34374a;
-      border-radius: 11px;
-      text-decoration: none;
-    }
-    .upcoming-item:hover { border-color: #6558ad; background: #222337; }
-    .upcoming-date {
-      display: grid;
-      flex: 0 0 46px;
-      place-items: center;
-      min-height: 46px;
-      color: #d3cbff;
-      background: #35304f;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
-    }
-    .upcoming-date.green { color: #8dd8bd; background: #233d39; }
-    .upcoming-date.orange { color: #f1c27d; background: #443729; }
-    .upcoming-date.pink { color: #f0a2be; background: #452c3b; }
-    .upcoming-date.blue { color: #9dc9ff; background: #26394d; }
-    .upcoming-date.red { color: #ff9aab; background: #482833; }
-    .upcoming-date.white { color: #f0f1f5; background: #414452; }
-    .upcoming-details { min-width: 0; }
-    .upcoming-title { display: block; overflow: hidden; color: #eff0fa; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
-    .upcoming-meta { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
-    #dashboardUpcomingExpenses .upcoming-item.is-monthly .upcoming-title { color: #77b9ff; }
-    #dashboardUpcomingExpenses .upcoming-item.is-monthly .upcoming-meta { color: #8caecc; }
-    #dashboardUpcomingExpenses .upcoming-item.is-yearly .upcoming-title { color: #9dc9ff; }
-    #dashboardUpcomingExpenses .upcoming-item.is-yearly .upcoming-meta { color: #7993b0; }
-    #dashboardUpcomingExpenses .upcoming-item.is-once .upcoming-title { color: #eff0fa; }
-    .dashboard-empty { padding: 20px 12px; color: var(--muted); text-align: center; background: #1b1e2c; border: 1px dashed #3a3d50; border-radius: 11px; }
     .expense-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     .expense-summary-row {
       display: flex;
@@ -279,9 +239,6 @@
       .expense-summary-row.today-spent strong { font-size: 20px; }
       .expense-summary-row.month-income-remaining strong { font-size: 17px; }
     }
-    .dashboard-expense-upcoming { margin-top: 18px; }
-    .dashboard-expense-upcoming h4 { margin: 0; font-size: 14px; }
-    .dashboard-expense-upcoming .dashboard-card-subtitle { margin-bottom: 10px; }
     .dashboard-action { display: inline-flex; margin-top: 16px; color: #bcb2ff; font-size: 13px; text-decoration: none; }
     .dashboard-action:hover { color: #e8e4ff; text-decoration: underline; }
     .delete-button {
@@ -594,11 +551,6 @@
               </div>
               <p class="expense-summary-count" id="dashboardExpenseCount"></p>
             </div>
-            <section class="dashboard-expense-upcoming" aria-labelledby="dashboardUpcomingExpensesHeading">
-              <h4 id="dashboardUpcomingExpensesHeading">รายการที่ต้องจ่ายเร็ว ๆ นี้</h4>
-              <p class="dashboard-card-subtitle">3 รายการถัดไปที่ยังไม่ได้จ่าย</p>
-              <div class="upcoming-list" id="dashboardUpcomingExpenses" aria-live="polite"></div>
-            </section>
             <a class="dashboard-action" href="#expenses">ดูรายการรายจ่าย →</a>
           </section>
         </section>
@@ -1839,52 +1791,6 @@
       document.getElementById("dashboardExpenseCount").textContent =
         `${new Intl.NumberFormat("th-TH").format(itemCount)} รายการ · จ่ายแล้ว ${new Intl.NumberFormat("th-TH").format(paidCount)} รายการ`;
 
-      const upcomingExpenses = [];
-      const lastExpenseSearchDate = new Date(today.getFullYear() + 8, today.getMonth(), today.getDate());
-      for (let date = new Date(today); date <= lastExpenseSearchDate && upcomingExpenses.length < 3; date.setDate(date.getDate() + 1)) {
-        const dayExpenses = getExpensesForDate(date)
-          .filter((item) => !(item.paidDates || []).includes(item.occurrenceDate))
-          .sort((first, second) => first.title.localeCompare(second.title, "th"));
-        dayExpenses.forEach((item) => {
-          if (upcomingExpenses.length < 3) upcomingExpenses.push({ ...item, date: new Date(date) });
-        });
-      }
-
-      const upcomingExpenseList = document.getElementById("dashboardUpcomingExpenses");
-      upcomingExpenseList.replaceChildren();
-      if (upcomingExpenses.length === 0) {
-        const empty = document.createElement("div");
-        empty.className = "dashboard-empty";
-        empty.textContent = "ไม่มีรายการที่ต้องจ่ายในเร็ว ๆ นี้";
-        upcomingExpenseList.append(empty);
-      } else {
-        upcomingExpenses.forEach((item) => {
-          const row = document.createElement("article");
-          row.className = "upcoming-item";
-          row.classList.add(item.recurrence === "monthly"
-            ? "is-monthly"
-            : item.recurrence === "yearly" ? "is-yearly" : "is-once");
-          const dateBadge = document.createElement("span");
-          dateBadge.className = "upcoming-date";
-          dateBadge.textContent = new Intl.DateTimeFormat("th-TH", {
-            day: "numeric", month: "short"
-          }).format(item.date);
-          const details = document.createElement("span");
-          details.className = "upcoming-details";
-          const title = document.createElement("span");
-          title.className = "upcoming-title";
-          title.textContent = item.title;
-          const meta = document.createElement("span");
-          meta.className = "upcoming-meta";
-          const amount = item.amount !== "" && item.amount !== undefined && Number.isFinite(Number(item.amount))
-            ? ` · ${currencyFormatter.format(Number(item.amount))}`
-            : "";
-          meta.textContent = `${expenseDateFormatter.format(item.date)}${amount}`;
-          details.append(title, meta);
-          row.append(dateBadge, details);
-          upcomingExpenseList.append(row);
-        });
-      }
     }
 
     function setActivePage() {
