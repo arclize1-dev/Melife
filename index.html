@@ -260,15 +260,52 @@
     #dashboardUpcomingExpenses .upcoming-item.is-yearly .upcoming-meta { color: #7993b0; }
     #dashboardUpcomingExpenses .upcoming-item.is-once .upcoming-title { color: #eff0fa; }
     .dashboard-empty { padding: 20px 12px; color: var(--muted); text-align: center; background: #1b1e2c; border: 1px dashed #3a3d50; border-radius: 11px; }
-    .expense-summary { display: grid; gap: 10px; }
-    .expense-summary-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; color: #c9cbd9; font-size: 13px; }
-    .expense-summary-row strong { color: #c4baff; font-size: 16px; white-space: nowrap; }
+    .expense-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .expense-summary-row {
+      display: flex;
+      min-width: 0;
+      min-height: 82px;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      color: #c9cbd9;
+      background: linear-gradient(145deg, #202331, #191b27);
+      border: 1px solid #34374a;
+      border-radius: 14px;
+      font-size: 12px;
+    }
+    .expense-summary-row > span { color: #c9cbd9; line-height: 1.45; }
+    .expense-summary-row strong { color: #c4baff; font-size: 18px; white-space: nowrap; }
     .expense-summary-row.total > span, .expense-summary-row.total strong { color: #ff9aab; }
     .expense-summary-row.paid > span, .expense-summary-row.paid strong { color: #8dd8bd; }
-    .expense-summary-row.remaining { margin-top: 4px; padding-top: 13px; border-top: 1px solid var(--line); }
+    .expense-summary-row.today-spent {
+      min-height: 100px;
+      background: linear-gradient(135deg, #20354a, #1a2535);
+      border-color: #36506b;
+    }
+    .expense-summary-row.today-spent > span, .expense-summary-row.today-spent strong { color: #9dc9ff; }
+    .expense-summary-row.today-spent > span { font-size: 13px; }
+    .expense-summary-row.today-spent strong { font-size: 24px; }
+    .expense-summary-row.month-spent > span, .expense-summary-row.month-spent strong { color: #8dd8bd; }
     .expense-summary-row.remaining > span, .expense-summary-row.remaining strong { color: #f1b878; }
     .expense-summary-row.remaining strong { font-size: 19px; }
-    .expense-summary-count { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+    .expense-summary-row.month-income-remaining {
+      min-height: 100px;
+      background: linear-gradient(135deg, #302a49, #211f33);
+      border-color: #514777;
+    }
+    .expense-summary-row.month-income-remaining > span, .expense-summary-row.month-income-remaining strong { color: #c4baff; }
+    .expense-summary-row.month-income-remaining strong { font-size: 20px; }
+    .expense-summary-count { grid-column: 1 / -1; margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+    @media (max-width: 480px) {
+      .expense-summary { gap: 8px; }
+      .expense-summary-row { min-height: 76px; padding: 12px; }
+      .expense-summary-row.today-spent, .expense-summary-row.month-income-remaining { min-height: 92px; }
+      .expense-summary-row.today-spent strong { font-size: 20px; }
+      .expense-summary-row.month-income-remaining strong { font-size: 17px; }
+    }
     .dashboard-expense-upcoming { margin-top: 18px; }
     .dashboard-expense-upcoming h4 { margin: 0; font-size: 14px; }
     .dashboard-expense-upcoming .dashboard-card-subtitle { margin-bottom: 10px; }
@@ -775,16 +812,28 @@
             <h3 id="monthlyExpensesHeading">สรุปรายจ่าย</h3>
             <p class="dashboard-card-subtitle" id="dashboardExpenseMonth"></p>
             <div class="expense-summary">
+              <div class="expense-summary-row today-spent">
+                <span>วันนี้ใช้ไปแล้ว</span>
+                <strong id="dashboardTodaySpent"></strong>
+              </div>
+              <div class="expense-summary-row month-income-remaining">
+                <span>เงินคงเหลือเดือนนี้</span>
+                <strong id="dashboardMonthIncomeRemaining"></strong>
+              </div>
               <div class="expense-summary-row total">
                 <span>รายจ่ายทั้งหมด</span>
                 <strong id="dashboardExpenseTotal"></strong>
               </div>
               <div class="expense-summary-row paid">
-                <span>จ่ายแล้ว</span>
+                <span>รายจ่ายรายเดือนที่จ่ายแล้ว</span>
                 <strong id="dashboardExpensePaid"></strong>
               </div>
+              <div class="expense-summary-row month-spent">
+                <span>เดือนนี้ใช้ไปแล้ว</span>
+                <strong id="dashboardMonthSpent"></strong>
+              </div>
               <div class="expense-summary-row remaining">
-                <span>คงเหลือที่ต้องจ่าย</span>
+                <span>ค่าใช้จ่ายรายเดือนที่เหลือ</span>
                 <strong id="dashboardExpenseRemaining"></strong>
               </div>
               <p class="expense-summary-count" id="dashboardExpenseCount"></p>
@@ -905,7 +954,7 @@
           </div>
           <div class="expense-field">
             <label for="dailySpendingAmount">จำนวนเงิน</label>
-            <input id="dailySpendingAmount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="ระบุจำนวนเงิน" required>
+            <input id="dailySpendingAmount" type="text" inputmode="decimal" placeholder="ระบุจำนวนเงิน" required>
           </div>
           <div class="expense-field">
             <label for="dailySpendingDate">วันที่ใช้จ่าย</label>
@@ -1211,6 +1260,16 @@
 
     function selectedExpenseKey() {
       return dateKey(selectedExpenseDate);
+    }
+
+    function parseDailySpendingAmount(value) {
+      const terms = value.trim().split("+").map((term) => term.trim());
+      if (terms.length === 0 || terms.some((term) => !/^\d+(?:\.\d{1,2})?$/.test(term))) return null;
+      const cents = terms.reduce((total, term) => {
+        const [whole, fraction = ""] = term.split(".");
+        return total + Number(whole) * 100 + Number(fraction.padEnd(2, "0"));
+      }, 0);
+      return Number.isSafeInteger(cents) && cents > 0 ? (cents / 100).toFixed(2) : null;
     }
 
     function dateFromKey(key) {
@@ -1878,6 +1937,7 @@
         return;
       }
       renderMonthlyIncome();
+      renderDashboard();
     }
 
     function deleteExpenseOccurrence(sourceDate, expenseId, occurrenceDate) {
@@ -1991,6 +2051,7 @@
         dailySpending = JSON.parse(previousDailySpending);
       }
       renderDailySpending();
+      renderDashboard();
     }
 
     function renderExpenses() {
@@ -2171,30 +2232,50 @@
 
       const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
       const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-      let totalAmount = 0;
-      let paidAmount = 0;
+      const currentPeriod = monthPeriodKey(today);
+      const todayKey = toDatabaseDate(dateKey(today));
+      let totalCents = 0;
+      let paidCents = 0;
       let itemCount = 0;
       let paidCount = 0;
       for (let day = 1; day <= daysInMonth; day += 1) {
         const date = new Date(monthStart.getFullYear(), monthStart.getMonth(), day);
         getExpensesForDate(date).forEach((item) => {
           itemCount += 1;
-          const amount = item.amount === "" ? 0 : Number(item.amount);
-          if (Number.isFinite(amount)) {
-            totalAmount += amount;
-            if ((item.paidDates || []).includes(item.occurrenceDate)) paidAmount += amount;
+          if (item.amount !== "" && item.amount !== undefined && Number.isFinite(Number(item.amount))) {
+            const amountCents = Math.round(Number(item.amount) * 100);
+            totalCents += amountCents;
+            if ((item.paidDates || []).includes(item.occurrenceDate)) paidCents += amountCents;
           }
           if ((item.paidDates || []).includes(item.occurrenceDate)) paidCount += 1;
         });
       }
+      const dailySpentTodayCents = dailySpending.reduce((total, item) =>
+        toDatabaseDate(item.date) === todayKey
+          ? total + Math.round(Number(item.amount) * 100)
+          : total, 0);
+      const dailySpentMonthCents = dailySpending.reduce((total, item) =>
+        monthPeriodKey(dateFromKey(item.date)) === currentPeriod
+          ? total + Math.round(Number(item.amount) * 100)
+          : total, 0);
+      const incomeMonthCents = incomeEntries.reduce((total, item) =>
+        monthPeriodKey(dateFromKey(item.date)) === currentPeriod
+          ? total + Math.round(Number(item.amount) * 100)
+          : total, 0);
+      const monthSpentCents = dailySpentMonthCents + paidCents;
       const currencyFormatter = new Intl.NumberFormat("th-TH", {
         style: "currency", currency: "THB", maximumFractionDigits: 2
       });
       document.getElementById("dashboardExpenseMonth").textContent =
         new Intl.DateTimeFormat("th-TH", { month: "long", year: "numeric" }).format(today);
-      document.getElementById("dashboardExpenseTotal").textContent = currencyFormatter.format(totalAmount);
-      document.getElementById("dashboardExpensePaid").textContent = currencyFormatter.format(paidAmount);
-      document.getElementById("dashboardExpenseRemaining").textContent = currencyFormatter.format(totalAmount - paidAmount);
+      document.getElementById("dashboardTodaySpent").textContent = currencyFormatter.format(dailySpentTodayCents / 100);
+      document.getElementById("dashboardExpenseTotal").textContent = currencyFormatter.format(totalCents / 100);
+      document.getElementById("dashboardExpensePaid").textContent = currencyFormatter.format(paidCents / 100);
+      document.getElementById("dashboardMonthSpent").textContent = currencyFormatter.format(monthSpentCents / 100);
+      document.getElementById("dashboardExpenseRemaining").textContent =
+        currencyFormatter.format((totalCents - paidCents) / 100);
+      document.getElementById("dashboardMonthIncomeRemaining").textContent =
+        currencyFormatter.format((incomeMonthCents - monthSpentCents) / 100);
       document.getElementById("dashboardExpenseCount").textContent =
         `${new Intl.NumberFormat("th-TH").format(itemCount)} รายการ · จ่ายแล้ว ${new Intl.NumberFormat("th-TH").format(paidCount)} รายการ`;
 
@@ -2363,6 +2444,7 @@
       titleInput.value = "";
       amountInput.value = "";
       renderMonthlyIncome();
+      renderDashboard();
       status.textContent = "เพิ่มรายได้แล้ว";
     });
     document.getElementById("incomeAmount").addEventListener("input", (event) => event.currentTarget.setCustomValidity(""));
@@ -2386,6 +2468,7 @@
       const status = document.getElementById("dailySpendingStatus");
       const title = titleInput.value.trim() || "วันนี้ใช้ไปแล้ว";
       const amount = amountInput.value.trim();
+      const totalAmount = parseDailySpendingAmount(amount);
       status.textContent = "";
 
       titleInput.setCustomValidity("");
@@ -2401,8 +2484,8 @@
         dailySpendingDate.reportValidity();
         return;
       }
-      if (!Number.isFinite(Number(amount)) || Number(amount) <= 0) {
-        amountInput.setCustomValidity("กรุณาระบุจำนวนเงินที่มากกว่า 0");
+      if (totalAmount === null) {
+        amountInput.setCustomValidity("กรุณาระบุจำนวนเงิน หรือบวกจำนวนเงินด้วยเครื่องหมาย + (ทศนิยมไม่เกิน 2 ตำแหน่ง)");
         amountInput.reportValidity();
         return;
       }
@@ -2414,7 +2497,7 @@
         id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         date: spendingDate,
         title,
-        amount
+        amount: totalAmount
       }];
       if (!saveDailySpending()) {
         dailySpending = JSON.parse(previousDailySpending);
@@ -2430,6 +2513,7 @@
       amountInput.value = "";
       renderExpenses();
       renderDailySpending();
+      renderDashboard();
       status.textContent = "บันทึกเงินใช้จ่ายแล้ว";
     });
     document.getElementById("dailySpendingTitle").addEventListener("input", (event) => event.currentTarget.setCustomValidity(""));
